@@ -1,5 +1,5 @@
 {
-    "name": "PeoplePerHour/omnipay-adyen",
+    "name": "peopleperhour/omnipay-adyen",
     "type": "library",
     "description": "Adyen driver for the Omnipay payment processing library",
     "keywords": [
