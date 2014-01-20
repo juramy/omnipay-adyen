@@ -23,7 +23,9 @@ class CompletePurchaseRequest extends PurchaseRequest
                 $this->getMerchantReference().
                 $this->getSkinCode().
                 $this->getMerchantAccount().
-                $this->getSessionValidity(),
+                $this->getSessionValidity().
+                $this->getAllowedMethods().
+                $this->getBlockedMethods(),
                 $this->getSecret(),
                 true
             )
@@ -35,7 +37,7 @@ class CompletePurchaseRequest extends PurchaseRequest
         $data = $this->getData();
         $data['success'] = ('AUTHORISED' == $this->httpRequest->query->get('authResult')) ? true : false;
         $data['allParams'] = $this->httpRequest->query->all();
-        
+
         return new CompletePurchaseResponse($this, $data);
     }
 }

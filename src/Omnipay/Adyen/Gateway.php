@@ -6,7 +6,11 @@ use Omnipay\Common\AbstractGateway;
 use Omnipay\Adyen\Message\CompletePurchaseResponse;
 
 /**
-* Adyen Gateway
+ * Adyen Gateway
+ *
+ * Adyen is a Off-site gateway - No need to send request, instead we need to redirect customer to Adyen site.
+ *
+ * @link https://support.adyen.com/index.php?/Knowledgebase/List
  */
 class Gateway extends AbstractGateway
 {
@@ -19,7 +23,7 @@ class Gateway extends AbstractGateway
     {
         return array(
             'testMode' => true,
-            'secret' => 'test'
+            'secret' => 'see-what-is-configured-in-the-adyen-skin',
         );
     }
 
@@ -103,11 +107,31 @@ class Gateway extends AbstractGateway
         return $this->setParameter('allowedMethods', $value);
     }
 
+    public function getBlockedMethods()
+    {
+        return $this->getParameter('blockedMethods');
+    }
+
+    public function setBlockedMethods($value)
+    {
+        return $this->setParameter('blockedMethods', $value);
+    }
+
+    public function getShopperReference()
+    {
+        return $this->getParameter('shopperReference');
+    }
+
+    public function setShopperReference($value)
+    {
+        return $this->setParameter('shopperReference', $value);
+    }
+
     public function purchase(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\Adyen\Message\PurchaseRequest', $parameters);
     }
-    
+
     public function completePurchase(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\Adyen\Message\CompletePurchaseRequest', $parameters);
