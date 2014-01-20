@@ -1,18 +1,16 @@
 {
-    "name": "omnipay/2checkout",
+    "name": "PeoplePerHour/omnipay-adyen",
     "type": "library",
-    "description": "2Checkout driver for the Omnipay payment processing library",
+    "description": "Adyen driver for the Omnipay payment processing library",
     "keywords": [
-        "2checkout",
-        "2co",
+        "adyen",
         "gateway",
         "merchant",
         "omnipay",
         "pay",
-        "payment",
-        "twocheckout"
+        "payment"
     ],
-    "homepage": "https://github.com/omnipay/2checkout",
+    "homepage": "https://github.com/PeoplePerHour/omnipay-adyen",
     "license": "MIT",
     "authors": [
         {
@@ -21,7 +19,11 @@
         },
         {
             "name": "Omnipay Contributors",
-            "homepage": "https://github.com/omnipay/2checkout/contributors"
+            "homepage": "https://github.com/titlextechnology/omnipay-adyen/contributors"
+        },
+        {
+            "name": "PeoplePerHour",
+            "homepage": "http://www.peopleperhour.com"
         }
     ],
     "autoload": {
