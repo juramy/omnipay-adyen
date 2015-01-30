@@ -32,7 +32,7 @@ class PurchaseRequest extends AbstractRequest
     }
 
     /**
-     * @param String $value The code of the skin to be used. 
+     * @param String $value The code of the skin to be used.
      * You can have more than one skin associated with your account if you require a different branding.
      */
     public function setSkinCode($value)
@@ -88,8 +88,8 @@ class PurchaseRequest extends AbstractRequest
     }
 
     /**
-     * @param String $value The (merchant) reference for this payment. 
-     * This reference will be used in all communication to the merchant about the status of the payment. 
+     * @param String $value The (merchant) reference for this payment.
+     * This reference will be used in all communication to the merchant about the status of the payment.
      * Although it is a good idea to make sure it is unique, this is not a requirement.
      */
     public function setMerchantReference($value)
@@ -124,9 +124,9 @@ class PurchaseRequest extends AbstractRequest
 
     /**
      * @param String $value A comma-separated list of allowed payment methods.
-     * This acts as a filter on the payment methods which would normally be available in the skin. 
-     * Only the ones in this list will be shown (if available); all others will be ignored. No spaces are allowed. 
-     * Note that this parameter is optional. 
+     * This acts as a filter on the payment methods which would normally be available in the skin.
+     * Only the ones in this list will be shown (if available); all others will be ignored. No spaces are allowed.
+     * Note that this parameter is optional.
      * If the parameter is not used the value for this field in the merchantSignature computation is an empty String.
      */
     public function setAllowedMethods($value)
@@ -209,7 +209,7 @@ class PurchaseRequest extends AbstractRequest
         $data['skinCode'] = $this->getSkinCode();
         $data['merchantAccount'] = $this->getMerchantAccount();
         $data['sessionValidity'] = $this->getSessionValidity();
-        $data['shopperEmail'] = $this->getShopperLocale();
+        $data['shopperEmail'] = $this->getShopperEmail();
         $data['shopperReference'] = $this->getShopperReference();
         $data['allowedMethods'] = $this->getAllowedMethods();
         $data['blockedMethods'] = $this->getBlockedMethods();
