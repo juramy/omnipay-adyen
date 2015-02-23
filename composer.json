@@ -1,5 +1,5 @@
 {
-    "name": "peopleperhour/omnipay-adyen",
+    "name": "nilvola/omnipay-adyen",
     "type": "library",
     "description": "Adyen driver for the Omnipay payment processing library",
     "keywords": [
