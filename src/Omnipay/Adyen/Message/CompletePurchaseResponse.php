@@ -14,14 +14,28 @@ class CompletePurchaseResponse extends AbstractResponse
     public function getResponse()
     {
         $data = ($this->getData());
-        
+
         return isset($data['allParams']) ? $data['allParams'] : $this;
     }
 
     public function isSuccessful()
     {
         $data = ($this->getData());
-        
-        return (isset($data['success']) and $data['success'] === true) ? true : false;
+
+
+        if (!isset($data['success'])) {
+            return false;
+        }
+
+        if ($data['success'] !== true) {
+            return false;
+        }
+
+        if ($data['allParams']['merchantSig'] !== $data['responseSignature']) {
+            return false;
+        }
+
+
+        return true;
     }
 }
