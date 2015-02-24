@@ -10,9 +10,13 @@
         "pay",
         "payment"
     ],
-    "homepage": "https://github.com/PeoplePerHour/omnipay-adyen",
+    "homepage": "https://github.com/MujibAzizi/omnipay-adyen",
     "license": "MIT",
     "authors": [
+        {
+            "name": "Mujib Azizi",
+            "email" : "mujib@nilvola.nl"
+        },
         {
             "name": "Adrian Macneil",
             "email": "adrian@adrianmacneil.com"
@@ -34,10 +38,5 @@
     },
     "require-dev": {
         "omnipay/tests": "~2.0"
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
-        }
     }
 }

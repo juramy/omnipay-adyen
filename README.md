@@ -2,30 +2,18 @@
 
 **Adyen driver for the Omnipay PHP payment processing library**
 
-[![Build Status](https://travis-ci.org/PeoplePerHour/omnipay-adyen.png?branch=master)](https://travis-ci.org/PeoplePerHour/omnipay-adyen)
-[![Latest Stable Version](https://poser.pugx.org/PeoplePerHour/omnipay-adyen/version.png)](https://packagist.org/packages/PeoplePerHour/omnipay-adyen)
-[![Total Downloads](https://poser.pugx.org/PeoplePerHour/omnipay-adyen/d/total.png)](https://packagist.org/packages/PeoplePerHour/omnipay-adyen)
+[![Build Status](https://travis-ci.org/MujibAzizi/omnipay-adyen.svg)](https://travis-ci.org/MujibAzizi/omnipay-adyen)
 
 [Omnipay](https://github.com/omnipay/omnipay) is a framework agnostic, multi-gateway payment
 processing library for PHP 5.3+. This package implements Adyen support for Omnipay.
 
 ## Installation
 
-Omnipay is installed via [Composer](http://getcomposer.org/). To install, simply add it
-to your `composer.json` file:
+Omnipay is installed via [Composer](http://getcomposer.org/). To install, simply run
 
-```json
-{
-    "require": {
-        "PeoplePerHour/omnipay-adyen": "~2.0"
-    }
-}
 ```
-
-And run composer to update your dependencies:
-
-    $ curl -s http://getcomposer.org/installer | php
-    $ php composer.phar update
+composer require nilvola/omnipay-adyen
+```
 
 ## Basic Usage
 
@@ -46,5 +34,5 @@ If you want to keep up to date with release anouncements, discuss ideas for the 
 or ask more detailed questions, there is also a [mailing list](https://groups.google.com/forum/#!forum/omnipay) which
 you can subscribe to.
 
-If you believe you have found a bug, please report it using the [GitHub issue tracker](https://github.com/PeoplePerHour/omnipay-adyen/issues),
+If you believe you have found a bug, please report it using the [GitHub issue tracker](https://github.com/MujibAzizi/omnipay-adyen/issues),
 or better yet, fork the library and submit a pull request.
