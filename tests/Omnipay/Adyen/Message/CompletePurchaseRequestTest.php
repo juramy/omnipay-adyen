@@ -17,9 +17,9 @@ class CompletePurchaseRequestTest extends TestCase
         ));
 
         $this->request = new CompletePurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
-        $this->request->initialize([
+        $this->request->initialize(array(
             'secret' => 'Kah942*$7sdp0)'
-        ]);
+        ));
     }
 
     public function testGetData()

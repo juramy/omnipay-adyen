@@ -12,9 +12,9 @@ class CompletePurchaseResponseTest extends TestCase
             $this->getMockRequest(),
             array(
                 'success' => true,
-                'allParams' => [
+                'allParams' => array(
                     'merchantSig' => 'Ti+ACycv7TmV3VY6hfQ6tIIdhGM='
-                ],
+                ),
                 'responseSignature' => 'Ti+ACycv7TmV3VY6hfQ6tIIdhGM='
             )
         );
@@ -28,9 +28,9 @@ class CompletePurchaseResponseTest extends TestCase
             $this->getMockRequest(),
             array(
                 'success' => false,
-                'allParams' => [
+                'allParams' => array(
                     'merchantSig' => 'Ti+ACycv7TmV3VY6hfQ6tIIdhGM='
-                ],
+                ),
                 'responseSignature' => 'Ti+ACycv7TmV3VY6hfQ6tIIdhGM='
             )
         );
@@ -44,9 +44,9 @@ class CompletePurchaseResponseTest extends TestCase
             $this->getMockRequest(),
             array(
                 'success' => true,
-                'allParams' => [
+                'allParams' => array(
                     'merchantSig' => 'Ti+ACycv7TmV3VY6hfQ6tIIdhGM='
-                ],
+                ),
                 'responseSignature' => 'Wkf3d2PVmSPu5Zn5N5H240AQfJ0='
             )
         );
@@ -60,9 +60,9 @@ class CompletePurchaseResponseTest extends TestCase
             $this->getMockRequest(),
             array(
                 'success' => true,
-                'allParams' => [
+                'allParams' => array(
                     'merchantSig' => 'Ti+ACycv7TmV3VY6hfQ6tIIdhGM='
-                ],
+                ),
                 'responseSignature' => 'Ti+ACycv7TmV3VY6hfQ6tIIdhGM='
             )
         );
