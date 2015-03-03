@@ -229,6 +229,7 @@ class PurchaseRequest extends AbstractRequest
         // Optional fields (Not needed in signature)
         $data['shopperLocale'] = $this->getShopperLocale();
         $data['countryCode'] = $this->getCountryCode();
+        $data['resURL'] = $this->getReturnUrl();
 
         return $data;
     }

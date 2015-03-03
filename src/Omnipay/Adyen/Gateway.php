@@ -127,6 +127,16 @@ class Gateway extends AbstractGateway
         return $this->setParameter('shopperReference', $value);
     }
 
+    public function getReturnUrl()
+    {
+        return $this->getParameter('returnUrl');
+    }
+
+    public function setReturnUrl($value)
+    {
+        return $this->setParameter('returnUrl', $value);
+    }
+
     public function purchase(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\Adyen\Message\PurchaseRequest', $parameters);
