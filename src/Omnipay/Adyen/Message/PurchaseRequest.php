@@ -183,6 +183,16 @@ class PurchaseRequest extends AbstractRequest
         return $this->getParameter('countryCode');
     }
 
+    public function setRecurringContract($value)
+    {
+        return $this->setParameter('recurringContract', $value);
+    }
+
+    public function getRecurringContract()
+    {
+        return $this->getParameter('recurringContract');
+    }
+
     /**
      * Optional country code of shopper.
      * By default the payment methods offered to the shopper are filtered based on the country which the IP
@@ -211,6 +221,7 @@ class PurchaseRequest extends AbstractRequest
         $data['sessionValidity'] = $this->getSessionValidity();
         $data['shopperEmail'] = $this->getShopperEmail();
         $data['shopperReference'] = $this->getShopperReference();
+        $data['recurringContract'] = $this->getRecurringContract();
         $data['allowedMethods'] = $this->getAllowedMethods();
         $data['blockedMethods'] = $this->getBlockedMethods();
         $data['merchantSig'] = $this->generateSignature($data);
@@ -238,7 +249,9 @@ class PurchaseRequest extends AbstractRequest
                 $data['skinCode'].
                 $data['merchantAccount'].
                 $data['sessionValidity'].
+                $data['shopperEmail'].
                 $data['shopperReference'].
+                $data['recurringContract'].
                 $data['allowedMethods'].
                 $data['blockedMethods'];
 
