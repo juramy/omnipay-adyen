@@ -8,17 +8,14 @@ class CompletePurchaseRequestTest extends TestCase
 {
     public function setUp()
     {
-        $this->getHttpRequest()->initialize(array(
+        $this->request = new CompletePurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
+        $this->request->initialize(array(
+            'secret' => 'Kah942*$7sdp0)',
             'authResult' => 'AUTHORISED',
             'pspReference' => '1211992213193029',
             'merchantReference' => 'Internet Order 12345',
             'skinCode' => '4aD37dJA',
             'merchantReturnData' => '',
-        ));
-
-        $this->request = new CompletePurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
-        $this->request->initialize(array(
-            'secret' => 'Kah942*$7sdp0)'
         ));
     }
 
@@ -26,7 +23,14 @@ class CompletePurchaseRequestTest extends TestCase
     {
 
         $data = $this->request->getData();
-        $this->assertSame($this->getHttpRequest()->request->all(), $data);
+
+        $this->assertSame(array (
+          'authResult' => 'AUTHORISED',
+          'pspReference' => '1211992213193029',
+          'merchantReference' => 'Internet Order 12345',
+          'skinCode' => '4aD37dJA',
+          'merchantSig' => 'ytt3QxWoEhAskUzUne0P5VA9lPw=',
+        ), $data);
 
     }
 
