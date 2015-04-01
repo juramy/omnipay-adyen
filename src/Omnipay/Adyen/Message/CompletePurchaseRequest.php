@@ -98,6 +98,6 @@ class CompletePurchaseRequest extends PurchaseRequest
 
     public function isSuccessful()
     {
-        return (bool) (strpos($this->getAuthResult(), 'AUTHROIS') + 1);
+        return $this->getAuthResult() == 'AUTHORISED' || $this->getAuthResult() == 'AUTHORISATION';
     }
 }

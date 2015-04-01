@@ -27,11 +27,12 @@ class CompletePurchaseResponse extends AbstractResponse
             return false;
         }
 
-        if ($data['success'] !== true) {
+        if ($data['allParams']['merchantSig'] !== $data['responseSignature']) {
             return false;
         }
 
-        if ($data['allParams']['merchantSig'] !== $data['responseSignature']) {
+
+        if ($data['success'] !== true) {
             return false;
         }
 
