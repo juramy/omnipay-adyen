@@ -103,13 +103,13 @@ class CompletePurchaseRequest extends PurchaseRequest
         ];
 
         $escapeval = function($val) {
-            return str_replace(':','\\:',str_replace('\\','\\\\',$val));
+            return str_replace(':', '\\:', str_replace('\\', '\\\\', $val));
         };
 
         $params = array_filter($params);
         ksort($params, SORT_STRING);
 
-        $signData = implode(":",array_map($escapeval,array_merge(array_keys($params), array_values($params))));
+        $signData = implode(":", array_map($escapeval, array_merge(array_keys($params), array_values($params))));
 
         $merchantSig = base64_encode(hash_hmac('sha256', $signData, pack("H*", $this->getSecret()), true));
         return $merchantSig;
