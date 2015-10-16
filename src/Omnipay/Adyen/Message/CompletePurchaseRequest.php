@@ -125,6 +125,12 @@ class CompletePurchaseRequest extends PurchaseRequest
         return new CompletePurchaseResponse($this, $data);
     }
 
+    /**
+     * Check if the payment request is authorized. For use outside this library you
+     * should however use the isSuccessful() method of the CompletePurchaseResponse
+     * which also validates the response.
+     * @return bool
+     */
     public function isSuccessful()
     {
         return $this->getAuthResult() == 'AUTHORISED' || $this->getAuthResult() == 'AUTHORISATION';
