@@ -102,7 +102,7 @@ class CompletePurchaseRequest extends PurchaseRequest
             'merchantReturnData'    => $this->getMerchantReturnData()
         ];
 
-        $escapeval = function($val) {
+        $escapeval = function ($val) {
             return str_replace(':', '\\:', str_replace('\\', '\\\\', $val));
         };
 
