@@ -92,7 +92,7 @@ class CompletePurchaseRequest extends PurchaseRequest
 
     public function generateResponseSignature()
     {
-        $params = [
+        $params = array(
             'authResult'            => $this->getAuthResult(),
             'pspReference'          => $this->getPspReference(),
             'merchantReference'     => $this->getMerchantReference(),
@@ -100,7 +100,7 @@ class CompletePurchaseRequest extends PurchaseRequest
             'paymentMethod'         => $this->getPaymentMethod(),
             'shopperLocale'         => $this->getShopperLocale(),
             'merchantReturnData'    => $this->getMerchantReturnData()
-        ];
+        );
 
         $escapeval = function ($val) {
             return str_replace(':', '\\:', str_replace('\\', '\\\\', $val));
