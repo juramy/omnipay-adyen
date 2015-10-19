@@ -12,6 +12,12 @@
     ],
     "homepage": "https://github.com/MujibAzizi/omnipay-adyen",
     "license": "MIT",
+    "repositories": [
+        {
+            "url": "https://github.com/sergej-koscejev/omnipay-common.git",
+            "type": "git"
+        }
+    ],
     "authors": [
         {
             "name": "Mujib Azizi",
@@ -38,7 +44,7 @@
         "psr-0": { "Omnipay\\Adyen\\" : "src/" }
     },
     "require": {
-        "omnipay/common": "~2.0"
+        "omnipay/common": "dev-master#0b72bb12ce33ccac052095c7934a5f46bb6dca1a"
     },
     "require-dev": {
         "omnipay/tests": "~2.0"
