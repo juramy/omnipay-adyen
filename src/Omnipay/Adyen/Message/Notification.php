@@ -90,6 +90,118 @@ class Notification implements NotificationInterface
         return $this;
     }
 
+    public function getEventDate() {
+        return $this->parameters->get('eventDate');
+    }
+
+    public function setEventDate($value) {
+        $this->parameters->set('eventDate', $value);
+    }
+
+    public function getReason() {
+        return $this->parameters->get('reason');
+    }
+
+    public function setReason($value) {
+        $this->parameters->set('reason', $value);
+    }
+
+    public function getAdditionalData() {
+        return $this->parameters->get('additionalData');
+    }
+
+    public function setAdditionalData($value) {
+        $this->parameters->set('additionalData', $value);
+    }
+
+    public function getOriginalReference() {
+        return $this->parameters->get('originalReference');
+    }
+
+    public function setOriginalReference($value) {
+        $this->parameters->set('originalReference', $value);
+    }
+
+    public function getMerchantReference() {
+        return $this->parameters->get('merchantReference');
+    }
+
+    public function setMerchantReference($value) {
+        $this->parameters->set('merchantReference', $value);
+    }
+
+    public function getCurrency() {
+        return $this->parameters->get('currency');
+    }
+
+    public function setCurrency($value) {
+        $this->parameters->set('currency', $value);
+    }
+
+    public function getPspReference() {
+        return $this->parameters->get('pspReference');
+    }
+
+    public function setPspReference($value) {
+        $this->parameters->set('pspReference', $value);
+    }
+
+    public function getMerchantAccountCode() {
+        return $this->parameters->get('merchantAccountCode');
+    }
+
+    public function setMerchantAccountCode($value) {
+        $this->parameters->set('merchantAccountCode', $value);
+    }
+
+    public function getEventCode() {
+        return $this->parameters->get('eventCode');
+    }
+
+    public function setEventCode($value) {
+        $this->parameters->set('eventCode', $value);
+    }
+
+    public function getValue() {
+        return $this->parameters->get('value');
+    }
+
+    public function setValue($value) {
+        $this->parameters->set('value', $value);
+    }
+
+    public function getOperations() {
+        return $this->parameters->get('operations');
+    }
+
+    public function setOperations($value) {
+        $this->parameters->set('operations', $value);
+    }
+
+    public function getSuccess() {
+        return $this->parameters->get('success');
+    }
+
+    public function setSuccess($value) {
+        $this->parameters->set('success', $value);
+    }
+
+    public function getPaymentMethod() {
+        return $this->parameters->get('paymentMethod');
+    }
+
+    public function setPaymentMethod($value) {
+        $this->parameters->set('paymentMethod', $value);
+    }
+
+    public function getLive() {
+        return $this->parameters->get('live');
+    }
+
+    public function setLive($value) {
+        $this->parameters->set('live', $value);
+    }
+
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
