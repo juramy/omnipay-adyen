@@ -34,11 +34,20 @@ class Notification implements NotificationInterface
      */
     public function initialize(array $parameters = array())
     {
-        if (null !== $this->response) {
-            throw new RuntimeException('Request cannot be modified after it has been sent!');
-        }
-
         $this->parameters = new ParameterBag;
+
+        $parameters = array();
+        if (is_array($this->parameters)) {
+            foreach ($this->parameters as $key => $value) {
+                $parameterKey = explode('.', $key);
+                if(count($parameterKey) > 1) {
+                    if(isset($parameters[$parameterKey[0]])) {
+                        $parameters[$parameterKey[0]] = [];
+                    }
+                    $parameters[$parameterKey[0]][$parameterKey[1]] = $value;
+                }
+            }
+        }
 
         Helper::initialize($this, $parameters);
 
