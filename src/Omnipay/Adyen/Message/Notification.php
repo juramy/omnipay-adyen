@@ -2,6 +2,7 @@
 
 use Omnipay\Common\Helper;
 use Omnipay\Common\Message\NotificationInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * Adyen Purchase Request
