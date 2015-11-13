@@ -183,16 +183,6 @@ class PurchaseRequest extends AbstractRequest
         return $this->getParameter('countryCode');
     }
 
-    public function setRecurringContract($value)
-    {
-        return $this->setParameter('recurringContract', $value);
-    }
-
-    public function getRecurringContract()
-    {
-        return $this->getParameter('recurringContract');
-    }
-
     /**
      * Optional country code of shopper.
      * By default the payment methods offered to the shopper are filtered based on the country which the IP
@@ -206,12 +196,38 @@ class PurchaseRequest extends AbstractRequest
         return $this->setParameter('countryCode', $value);
     }
 
-    public function getData()
+    public function getBrandCode()
+    {
+        return $this->getParameter('brandCode');
+    }
+
+    /**
+     * Optional payment method used to process the payment.
+     */
+    public function setBrandCode($value)
+    {
+        return $this->setParameter('brandCode', $value);
+    }
+
+    public function getIssuerId()
+    {
+        return $this->getParameter('issuerId');
+    }
+
+    /**
+     * Optional issuer ID used to process the payment.
+     */
+    public function setIssuerId($value)
+    {
+        return $this->setParameter('issuerId', $value);
+    }
+
+    private function getDataWithoutSignature()
     {
         $this->validate('secret', 'amount');
         $data = array();
 
-        // Compulsory fields (needed to compute the signature)
+        // Compulsory fields
         $data['paymentAmount'] = $this->getAmountInteger();
         $data['currencyCode'] = $this->getCurrency();
         $data['shipBeforeDate'] = $this->getShipBeforeDate();
@@ -219,46 +235,51 @@ class PurchaseRequest extends AbstractRequest
         $data['skinCode'] = $this->getSkinCode();
         $data['merchantAccount'] = $this->getMerchantAccount();
         $data['sessionValidity'] = $this->getSessionValidity();
+
+        // Optional fields
         $data['shopperEmail'] = $this->getShopperEmail();
         $data['shopperReference'] = $this->getShopperReference();
-        $data['recurringContract'] = $this->getRecurringContract();
         $data['allowedMethods'] = $this->getAllowedMethods();
         $data['blockedMethods'] = $this->getBlockedMethods();
-        $data['merchantSig'] = $this->generateSignature($data);
-
-        // Optional fields (Not needed in signature)
         $data['shopperLocale'] = $this->getShopperLocale();
         $data['countryCode'] = $this->getCountryCode();
         $data['resURL'] = $this->getReturnUrl();
+        $data['brandCode'] = $this->getBrandCode();
+        $data['issuerId'] = $this->getIssuerId();
+
+        return $data;
+    }
+
+    public function getData()
+    {
+        $data = $this->getDataWithoutSignature();
+        $data['merchantSig'] = $this->generateSignature($data);
 
         return $data;
     }
 
     /**
-     * The Adyen signature is computed using the HMAC algorithm with the SHA-1 hashing function using the shared secret
-     * configured in the skin.
+     * The Adyen signature is computed using the HMAC algorithm with the SHA-256 hashing function using the shared
+     * secret configured in the skin.
      * The input is the concatenated values of a number of the payment session fields.
      * It is in Base64 encoded format.
      */
     public function generateSignature($data)
     {
-        // The data that needs to be signed is a concatenated string of the form data (except the order data)
-        $sign = $data['paymentAmount'].
-                $data['currencyCode'].
-                $data['shipBeforeDate'].
-                $data['merchantReference'].
-                $data['skinCode'].
-                $data['merchantAccount'].
-                $data['sessionValidity'].
-                $data['shopperEmail'].
-                $data['shopperReference'].
-                $data['recurringContract'].
-                $data['allowedMethods'].
-                $data['blockedMethods'];
+        $params = $this->getDataWithoutSignature();
 
-        // base64 encoding is necessary because the string needs to be send over the internet and
-        // the hexadecimal result of the HMAC encryption could include escape characters
-        return base64_encode(hash_hmac('sha256', $sign, pack("H*", $this->getSecret()), true));
+        // The character escape function
+        $escapeval = function ($val) {
+            return str_replace(':', '\\:', str_replace('\\', '\\\\', $val));
+        };
+
+        $params = array_filter($params);
+        ksort($params, SORT_STRING);
+
+        $signData = implode(":", array_map($escapeval, array_merge(array_keys($params), array_values($params))));
+
+        $merchantSig = base64_encode(hash_hmac('sha256', $signData, pack("H*", $this->getSecret()), true));
+        return $merchantSig;
     }
 
     /**

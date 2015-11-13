@@ -37,31 +37,29 @@ class Notification implements NotificationInterface
     {
         $this->parameters = new ParameterBag;
 
-        if (is_array($parameters)) {
-            foreach ($parameters as $key => $value) {
+        $tempParams = array();
 
-                if(strpos($value, ',') !== false) {
-                    $value = explode(',', $value);
-                }
+        foreach ($parameters as $key => $value) {
 
-                $parameterKey = explode('_', $key);
-                if(count($parameterKey) > 1) {
-                    if($this->parameters->has($parameterKey[0])) {
-                        $this->parameters->set($parameterKey[0], array($parameterKey[1] => $value));
-                    } else {
-                        $arr = $this->parameters->get($parameterKey[0]);
-                        $arr[$parameterKey[1]] = $value;
-                        $this->parameters->set($parameterKey[0], $arr);
-                    }
+            if(strpos($value, ',') !== false) {
+                $value = explode(',', $value);
+            }
+
+            $parameterKey = explode('_', $key);
+            if(count($parameterKey) > 1) {
+                if(isset($tempParams[$parameterKey[0]])) {
+                    $tempParams[$parameterKey[0]] = array($parameterKey[1] => $value);
+                } else {
+                    $tempParams[$parameterKey[0]][$parameterKey[1]] = $value;
                 }
-                else
-                {
-                    $this->parameters->set($parameterKey[0], $value);
-                }
+            }
+            else
+            {
+                $tempParams[$parameterKey[0]] = $value;
             }
         }
 
-        Helper::initialize($this, $this->parameters);
+        Helper::initialize($this, $tempParams);
 
         return $this;
     }
@@ -99,6 +97,11 @@ class Notification implements NotificationInterface
         $this->parameters->set($key, $value);
 
         return $this;
+    }
+
+    private function is_true($val, $return_null = false) {
+        $boolval = (is_string($val) ? filter_var($val, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : (bool) $val);
+        return ($boolval === null && !$return_null ? false : $boolval);
     }
 
     public function getEventDate() {
@@ -194,7 +197,7 @@ class Notification implements NotificationInterface
     }
 
     public function setSuccess($value) {
-        $this->parameters->set('success', $value);
+        $this->parameters->set('success', $this->is_true($value));
     }
 
     public function getPaymentMethod() {
@@ -210,7 +213,7 @@ class Notification implements NotificationInterface
     }
 
     public function setLive($value) {
-        $this->parameters->set('live', $value);
+        $this->parameters->set('live', $this->is_true($value));
     }
 
     /**
