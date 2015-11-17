@@ -428,5 +428,4 @@ class PurchaseRequest extends AbstractRequest
 
         return $this->getTestMode() ? $this->testEndpoint : $this->liveEndpoint;
     }
-
 }

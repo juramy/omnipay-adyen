@@ -99,11 +99,11 @@ class Notification implements NotificationInterface
         return $this;
     }
 
-    private function is_true($val, $return_null = false)
+    private function isTrue($val, $returnNull = false)
     {
-        $boolval = (is_string($val) ? filter_var($val, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : (bool)$val);
+        $boolVal = (is_string($val) ? filter_var($val, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : (bool)$val);
 
-        return ($boolval === null && !$return_null ? false : $boolval);
+        return ($boolVal === null && !$returnNull ? false : $boolVal);
     }
 
     public function getEventDate()
@@ -223,7 +223,7 @@ class Notification implements NotificationInterface
 
     public function setSuccess($value)
     {
-        $this->parameters->set('success', $this->is_true($value));
+        $this->parameters->set('success', $this->isTrue($value));
     }
 
     public function getPaymentMethod()
@@ -243,7 +243,7 @@ class Notification implements NotificationInterface
 
     public function setLive($value)
     {
-        $this->parameters->set('live', $this->is_true($value));
+        $this->parameters->set('live', $this->isTrue($value));
     }
 
     /**
@@ -302,5 +302,21 @@ class Notification implements NotificationInterface
     public function getResponse()
     {
         return self::$acceptedResponse;
+    }
+
+    public function isValid()
+    {
+        return  !empty($this->getLive()) &&
+                !empty($this->getParameter('amount')) &&
+                !empty($this->getParameter('currency')) &&
+                !empty($this->getParameter('value')) &&
+                !empty($this->getTransactionReference()) &&
+                !empty($this->getEventCode()) &&
+                !empty($this->getEventDate()) &&
+                !empty($this->getMerchantAccountCode()) &&
+                !empty($this->getMerchantReference()) &&
+                !empty($this->getPaymentMethod()) &&
+                !empty($this->getReason()) &&
+                !empty($this->getSuccess());
     }
 }

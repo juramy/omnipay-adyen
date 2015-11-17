@@ -152,5 +152,4 @@ class Gateway extends AbstractGateway
     {
         return new Notification(array_replace($this->getParameters(), $this->httpRequest->query->all()));
     }
-
 }
