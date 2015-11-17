@@ -24,7 +24,7 @@ class Gateway extends AbstractGateway
     {
         return array(
             'testMode' => true,
-            'secret' => 'see-what-is-configured-in-the-adyen-skin',
+            'secret'   => 'see-what-is-configured-in-the-adyen-skin',
         );
     }
 
@@ -148,11 +148,9 @@ class Gateway extends AbstractGateway
         return $this->createRequest('\Omnipay\Adyen\Message\CompletePurchaseRequest', $parameters);
     }
 
-    public function acceptNotification(array $parameters = array())
+    public function acceptNotification()
     {
-        $obj = new Notification($this->httpClient, $this->httpRequest);
-
-        return $obj->initialize(array_replace($this->getParameters(), $parameters));
+        return new Notification(array_replace($this->getParameters(), $this->httpRequest->query->all()));
     }
 
 }

@@ -11,6 +11,7 @@ class PurchaseRequest extends AbstractRequest
 {
     protected $liveEndpoint = 'https://live.adyen.com/hpp/pay.shtml';
     protected $testEndpoint = 'https://test.adyen.com/hpp/pay.shtml';        // Hosted Payment Pages (Single):
+
     //~ protected $testEndpoint = 'https://test.adyen.com/hpp/select.shtml'; // Hosted Payment Pages (multiple)
 
     public function getMerchantAccount()
@@ -222,30 +223,139 @@ class PurchaseRequest extends AbstractRequest
         return $this->setParameter('issuerId', $value);
     }
 
+    public function getShopperStatement()
+    {
+        return $this->getParameter('shopperStatement');
+    }
+
+    /**
+     * Optional field in your payment request if you want to include a variable shopper statement.
+     *
+     * You can include placeholders for the references. For example:
+     * ${reference} for the merchant reference
+     * ${pspReference} for the psp reference.
+     *
+     * Note:
+     * Not all acquirers support dynamic shopper statements.
+     * Maximum allowed character length: 135 characters
+     * Allowed characters: a-zA-Z0-9.,-?|
+     * If you set the shopperStatement field, it is included in the HMAC calculation.
+     * Not supported for all payments methods, for further information contact support.
+     */
+    public function setShopperStatement($value)
+    {
+        return $this->setParameter('shopperStatement', substr($value, 0, 135));
+    }
+
+    public function getOrderData()
+    {
+        return $this->getParameter('orderData');
+    }
+
+    public function getOfferEmail()
+    {
+        return $this->getParameter('offerEmail');
+    }
+
+    /**
+     * Optional. The email address of the shopper.
+     *
+     * If offerEmail is set to prompt, an extra Pay by Email payment method is added to the available payment method list.
+     *
+     * If the shopper selects this option, they receive an email with a link that they can use to complete the payment.
+     *
+     * The sessionValidity time value determines the link validity.
+     */
+    public function setOfferEmail($value)
+    {
+        return $this->setParameter('offerEmail', $value);
+    }
+
+    /**
+     * Optional  order details to display to the shopper on the payment review page.
+     *
+     * An HTML fragment containing the order details to display to the shopper on the payment review page,
+     * just before the shopper proceeds to the final order confirmation.
+     *
+     * Data is compressed and encoded in the session to prevent data corruption,
+     * for example in case the locale is set to non-Latin character sets.
+     *
+     * Compression: GZIP & Encoding: Base64
+     */
+    public function setOrderData($value)
+    {
+        return $this->setParameter('orderData', base64_encode(gzencode($value)));
+    }
+
+    public function getMerchantReturnData()
+    {
+        return $this->getParameter('merchantReturnData');
+    }
+
+    /**
+     * Optional field value that will be appended as-is to the return URL.
+     *
+     * This field value is appended as-is to the return URL when the shopper completes, or abandons,
+     * the payment process and is redirected to your web shop.
+     *
+     * Typically, this field is used to hold and transmit a session ID. Maximum allowed character length: 128 characters.
+     *
+     * Note:
+     * When you include the merchantReturnData parameter in your request, Adyen cannot guarantee that a payment method works as expected.
+     * Some redirect methods such as iDEAL apply size limitations to payment requests.
+     * If by including merchantReturnData in a request causes it to exceed the allowed maximum size, the payment can fail.
+     */
+    public function setMerchantReturnData($value)
+    {
+        return $this->setParameter('merchantReturnData', substr($value, 0, 128));
+    }
+
+    public function getFraudOffset()
+    {
+        return $this->getParameter('fraudOffset');
+    }
+
+    /**
+     * Optional fraud offset used to process the payment.
+     *
+     * An integer value that adds up to the normal fraud score.
+     * The value can be either a positive or negative integer.
+     */
+    public function setFraudOffset($value)
+    {
+        return $this->setParameter('fraudOffset', $value);
+    }
+
     private function getDataWithoutSignature()
     {
-        $this->validate('secret', 'amount');
+        $this->validate('secret', 'amount', 'currency', 'shipBeforeDate', 'merchantReference', 'skinCode', 'merchantAccount', 'sessionValidity');
         $data = array();
 
-        // Compulsory fields
+        // Compulsory fields (in the same order as listed on https://docs.adyen.com/display/TD/HPP+payment+fields)
+        $data['merchantReference'] = $this->getMerchantReference();
         $data['paymentAmount'] = $this->getAmountInteger();
         $data['currencyCode'] = $this->getCurrency();
         $data['shipBeforeDate'] = $this->getShipBeforeDate();
-        $data['merchantReference'] = $this->getMerchantReference();
         $data['skinCode'] = $this->getSkinCode();
         $data['merchantAccount'] = $this->getMerchantAccount();
         $data['sessionValidity'] = $this->getSessionValidity();
+        // merchantSig will be set later
 
-        // Optional fields
+        // Optional fields (again in the same order as listed on https://docs.adyen.com/display/TD/HPP+payment+fields)
+        $data['shopperLocale'] = $this->getShopperLocale();
+        $data['orderData'] = $this->getOrderData();
+        $data['merchantReturnData'] = $this->getMerchantReturnData();
+        $data['countryCode'] = $this->getCountryCode();
         $data['shopperEmail'] = $this->getShopperEmail();
         $data['shopperReference'] = $this->getShopperReference();
         $data['allowedMethods'] = $this->getAllowedMethods();
         $data['blockedMethods'] = $this->getBlockedMethods();
-        $data['shopperLocale'] = $this->getShopperLocale();
-        $data['countryCode'] = $this->getCountryCode();
-        $data['resURL'] = $this->getReturnUrl();
+        $data['offset'] = $this->getFraudOffset();
         $data['brandCode'] = $this->getBrandCode();
         $data['issuerId'] = $this->getIssuerId();
+        $data['shopperStatement'] = $this->getShopperStatement();
+        $data['offerEmail'] = $this->getOfferEmail();
+        $data['resURL'] = $this->getReturnUrl();
 
         return $data;
     }
@@ -253,7 +363,7 @@ class PurchaseRequest extends AbstractRequest
     public function getData()
     {
         $data = $this->getDataWithoutSignature();
-        $data['merchantSig'] = $this->generateSignature($data);
+        $data['merchantSig'] = $this->generateSignature(); // this field is also required
 
         return $data;
     }
@@ -264,21 +374,24 @@ class PurchaseRequest extends AbstractRequest
      * The input is the concatenated values of a number of the payment session fields.
      * It is in Base64 encoded format.
      */
-    public function generateSignature($data)
+    private function generateSignature()
     {
         $params = $this->getDataWithoutSignature();
 
         // The character escape function
-        $escapeval = function ($val) {
+        $escapeVal = function ($val) {
             return str_replace(':', '\\:', str_replace('\\', '\\\\', $val));
         };
 
-        $params = array_filter($params);
+        // Sort the array by key using SORT_STRING order
         ksort($params, SORT_STRING);
 
-        $signData = implode(":", array_map($escapeval, array_merge(array_keys($params), array_values($params))));
+        // Generate the signing data string
+        $signData = implode(':', array_map($escapeVal, array_merge(array_keys($params), array_values($params))));
 
-        $merchantSig = base64_encode(hash_hmac('sha256', $signData, pack("H*", $this->getSecret()), true));
+        // base64-encode the binary result of the HMAC computation
+        $merchantSig = base64_encode(hash_hmac('sha256', $signData, pack('H*', $this->getSecret()), true));
+
         return $merchantSig;
     }
 
@@ -286,7 +399,7 @@ class PurchaseRequest extends AbstractRequest
      * Send the request with specified data.
      * Adyen is a Off-site gateway - No need to send request, instead we need to redirect customer to Adyen site
      *
-     * @param  mixed             $data The data to send
+     * @param  mixed $data The data to send
      * @return ResponseInterface
      */
     public function sendData($data)
@@ -294,8 +407,26 @@ class PurchaseRequest extends AbstractRequest
         return $this->response = new PurchaseResponse($this, $data);
     }
 
+    /**
+     * Optional custom endpoint that will be used to process the payment.
+     */
+    public function setCustomEndpoint($value)
+    {
+        return $this->setParameter('customEndpoint', $value);
+    }
+
+    private function getCustomEndpoint()
+    {
+        return $this->getParameter('customEndpoint');
+    }
+
     public function getEndpoint()
     {
+        if (!empty($this->getCustomEndpoint())) {
+            return $this->getCustomEndpoint();
+        }
+
         return $this->getTestMode() ? $this->testEndpoint : $this->liveEndpoint;
     }
+
 }

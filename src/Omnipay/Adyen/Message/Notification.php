@@ -1,11 +1,13 @@
-<?php namespace Omnipay\Adyen\Message;
+<?php
+
+namespace Omnipay\Adyen\Message;
 
 use Omnipay\Common\Helper;
 use Omnipay\Common\Message\NotificationInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
- * Adyen Purchase Request
+ * Adyen Notification Request
  */
 class Notification implements NotificationInterface
 {
@@ -18,9 +20,9 @@ class Notification implements NotificationInterface
      */
     protected $parameters;
 
-    public function __construct()
+    public function __construct(array $parameters = array())
     {
-        $this->initialize();
+        $this->initialize($parameters);
     }
 
     /**
@@ -41,20 +43,18 @@ class Notification implements NotificationInterface
 
         foreach ($parameters as $key => $value) {
 
-            if(strpos($value, ',') !== false) {
+            if (strpos($value, ',') !== false) {
                 $value = explode(',', $value);
             }
 
             $parameterKey = explode('_', $key);
-            if(count($parameterKey) > 1) {
-                if(isset($tempParams[$parameterKey[0]])) {
+            if (count($parameterKey) > 1) {
+                if (isset($tempParams[$parameterKey[0]])) {
                     $tempParams[$parameterKey[0]] = array($parameterKey[1] => $value);
                 } else {
                     $tempParams[$parameterKey[0]][$parameterKey[1]] = $value;
                 }
-            }
-            else
-            {
+            } else {
                 $tempParams[$parameterKey[0]] = $value;
             }
         }
@@ -99,120 +99,150 @@ class Notification implements NotificationInterface
         return $this;
     }
 
-    private function is_true($val, $return_null = false) {
-        $boolval = (is_string($val) ? filter_var($val, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : (bool) $val);
+    private function is_true($val, $return_null = false)
+    {
+        $boolval = (is_string($val) ? filter_var($val, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : (bool)$val);
+
         return ($boolval === null && !$return_null ? false : $boolval);
     }
 
-    public function getEventDate() {
+    public function getEventDate()
+    {
         return $this->parameters->get('eventDate');
     }
 
-    public function setEventDate($value) {
+    public function setEventDate($value)
+    {
         $this->parameters->set('eventDate', $value);
     }
 
-    public function getReason() {
+    public function getReason()
+    {
         return $this->parameters->get('reason');
     }
 
-    public function setReason($value) {
+    public function setReason($value)
+    {
         $this->parameters->set('reason', $value);
     }
 
-    public function getAdditionalData() {
+    public function getAdditionalData()
+    {
         return $this->parameters->get('additionalData');
     }
 
-    public function setAdditionalData($value) {
+    public function setAdditionalData($value)
+    {
         $this->parameters->set('additionalData', $value);
     }
 
-    public function getOriginalReference() {
+    public function getOriginalReference()
+    {
         return $this->parameters->get('originalReference');
     }
 
-    public function setOriginalReference($value) {
+    public function setOriginalReference($value)
+    {
         $this->parameters->set('originalReference', $value);
     }
 
-    public function getMerchantReference() {
+    public function getMerchantReference()
+    {
         return $this->parameters->get('merchantReference');
     }
 
-    public function setMerchantReference($value) {
+    public function setMerchantReference($value)
+    {
         $this->parameters->set('merchantReference', $value);
     }
 
-    public function getCurrency() {
+    public function getCurrency()
+    {
         return $this->parameters->get('currency');
     }
 
-    public function setCurrency($value) {
+    public function setCurrency($value)
+    {
         $this->parameters->set('currency', $value);
     }
 
-    public function getPspReference() {
+    public function getPspReference()
+    {
         return $this->parameters->get('pspReference');
     }
 
-    public function setPspReference($value) {
+    public function setPspReference($value)
+    {
         $this->parameters->set('pspReference', $value);
     }
 
-    public function getMerchantAccountCode() {
+    public function getMerchantAccountCode()
+    {
         return $this->parameters->get('merchantAccountCode');
     }
 
-    public function setMerchantAccountCode($value) {
+    public function setMerchantAccountCode($value)
+    {
         $this->parameters->set('merchantAccountCode', $value);
     }
 
-    public function getEventCode() {
+    public function getEventCode()
+    {
         return $this->parameters->get('eventCode');
     }
 
-    public function setEventCode($value) {
+    public function setEventCode($value)
+    {
         $this->parameters->set('eventCode', $value);
     }
 
-    public function getValue() {
+    public function getValue()
+    {
         return $this->parameters->get('value');
     }
 
-    public function setValue($value) {
+    public function setValue($value)
+    {
         $this->parameters->set('value', $value);
     }
 
-    public function getOperations() {
+    public function getOperations()
+    {
         return $this->parameters->get('operations');
     }
 
-    public function setOperations($value) {
+    public function setOperations($value)
+    {
         $this->parameters->set('operations', $value);
     }
 
-    public function getSuccess() {
+    public function getSuccess()
+    {
         return $this->parameters->get('success');
     }
 
-    public function setSuccess($value) {
+    public function setSuccess($value)
+    {
         $this->parameters->set('success', $this->is_true($value));
     }
 
-    public function getPaymentMethod() {
+    public function getPaymentMethod()
+    {
         return $this->parameters->get('paymentMethod');
     }
 
-    public function setPaymentMethod($value) {
+    public function setPaymentMethod($value)
+    {
         $this->parameters->set('paymentMethod', $value);
     }
 
-    public function getLive() {
+    public function getLive()
+    {
         return $this->parameters->get('live');
     }
 
-    public function setLive($value) {
+    public function setLive($value)
+    {
         $this->parameters->set('live', $this->is_true($value));
     }
 
@@ -245,11 +275,12 @@ class Notification implements NotificationInterface
      */
     public function getTransactionStatus()
     {
-        if($this->getParameter('eventCode') == 'AUTHORISATION' && $this->getParameter('success')) {
+        if ($this->getParameter('eventCode') == 'AUTHORISATION' && $this->getParameter('success')) {
             return NotificationInterface::STATUS_COMPLETED;
-        } elseif($this->getParameter('eventCode') == 'PENDING') {
+        } elseif ($this->getParameter('eventCode') == 'PENDING') {
             return NotificationInterface::STATUS_PENDING;
         }
+
         return NotificationInterface::STATUS_FAILED;
     }
 

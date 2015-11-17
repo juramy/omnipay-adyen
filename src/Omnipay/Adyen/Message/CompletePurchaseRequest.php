@@ -90,28 +90,32 @@ class CompletePurchaseRequest extends PurchaseRequest
         return $this->setParameter('paymentMethod', $value);
     }
 
-    public function generateResponseSignature()
+    private function generateResponseSignature()
     {
         $params = array(
-            'authResult'            => $this->getAuthResult(),
-            'pspReference'          => $this->getPspReference(),
-            'merchantReference'     => $this->getMerchantReference(),
-            'skinCode'              => $this->getSkinCode(),
-            'paymentMethod'         => $this->getPaymentMethod(),
-            'shopperLocale'         => $this->getShopperLocale(),
-            'merchantReturnData'    => $this->getMerchantReturnData()
+            'authResult'         => $this->getAuthResult(),
+            'pspReference'       => $this->getPspReference(),
+            'merchantReference'  => $this->getMerchantReference(),
+            'skinCode'           => $this->getSkinCode(),
+            'paymentMethod'      => $this->getPaymentMethod(),
+            'shopperLocale'      => $this->getShopperLocale(),
+            'merchantReturnData' => $this->getMerchantReturnData()
         );
 
-        $escapeval = function ($val) {
+        // The character escape function
+        $escapeVal = function ($val) {
             return str_replace(':', '\\:', str_replace('\\', '\\\\', $val));
         };
 
-        $params = array_filter($params);
+        // Sort the array by key using SORT_STRING order
         ksort($params, SORT_STRING);
 
-        $signData = implode(":", array_map($escapeval, array_merge(array_keys($params), array_values($params))));
+        // Generate the signing data string
+        $signData = implode(':', array_map($escapeVal, array_merge(array_keys($params), array_values($params))));
 
-        $merchantSig = base64_encode(hash_hmac('sha256', $signData, pack("H*", $this->getSecret()), true));
+        // base64-encode the binary result of the HMAC computation
+        $merchantSig = base64_encode(hash_hmac('sha256', $signData, pack('H*', $this->getSecret()), true));
+
         return $merchantSig;
     }
 
