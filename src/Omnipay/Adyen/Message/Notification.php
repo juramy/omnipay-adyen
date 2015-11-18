@@ -276,12 +276,12 @@ class Notification implements NotificationInterface
     public function getTransactionStatus()
     {
         if ($this->getParameter('eventCode') == 'AUTHORISATION' && $this->getParameter('success')) {
-            return NotificationInterface::STATUS_COMPLETED;
+            return self::STATUS_COMPLETED;
         } elseif ($this->getParameter('eventCode') == 'PENDING') {
-            return NotificationInterface::STATUS_PENDING;
+            return self::STATUS_PENDING;
         }
 
-        return NotificationInterface::STATUS_FAILED;
+        return self::STATUS_FAILED;
     }
 
     /**
@@ -304,10 +304,19 @@ class Notification implements NotificationInterface
         return self::$acceptedResponse;
     }
 
+    /**
+     * The response code that can be given to the payment gateway
+     *
+     * @return string
+     */
+    public function getResponseCode()
+    {
+        return 200;
+    }
+
     public function isValid()
     {
-        return  !empty($this->getLive()) &&
-                !empty($this->getParameter('amount')) &&
+        return  is_bool($this->getLive()) &&
                 !empty($this->getParameter('currency')) &&
                 !empty($this->getParameter('value')) &&
                 !empty($this->getTransactionReference()) &&
@@ -316,7 +325,6 @@ class Notification implements NotificationInterface
                 !empty($this->getMerchantAccountCode()) &&
                 !empty($this->getMerchantReference()) &&
                 !empty($this->getPaymentMethod()) &&
-                !empty($this->getReason()) &&
-                !empty($this->getSuccess());
+                is_bool($this->getSuccess());
     }
 }
