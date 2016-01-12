@@ -148,6 +148,11 @@ class Gateway extends AbstractGateway
         return $this->createRequest('\Omnipay\Adyen\Message\CompletePurchaseRequest', $parameters);
     }
 
+    public function capture(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\Adyen\Message\CaptureRequest', $parameters);
+    }
+
     public function refund(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\Adyen\Message\RefundRequest', $parameters);

@@ -6,9 +6,9 @@ use Omnipay\Common\Message\AbstractRequest;
 use Guzzle\Common\Event;
 
 /**
- * Adyen Refund Request
+ * Adyen Capture Request
  */
-class RefundRequest extends AbstractRequest
+class Capture extends AbstractRequest
 {
     public function getUsername()
     {
@@ -104,11 +104,11 @@ class RefundRequest extends AbstractRequest
     {
         $httpResponse = $this->sendRequest($data);
 
-        return $this->response = new RefundResponse($this, $httpResponse->json());
+        return $this->response = new CaptureResponse($this, $httpResponse->json());
     }
 
     public function getEndPoint()
     {
-        return ('https://pal-' . ($this->getTestMode() ? 'test' : 'live') . '.adyen.com/pal/servlet/Payment/v12/refund');
+        return ('https://pal-' . ($this->getTestMode() ? 'test' : 'live') . '.adyen.com/pal/servlet/Payment/v12/capture');
     }
 }
