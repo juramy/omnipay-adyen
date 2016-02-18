@@ -32,15 +32,20 @@
         {
             "name": "Mark Kremer",
             "email": "mail@markkremer.nl"
+        },
+        {
+            "name": "Boy de Laat",
+            "email": "boy@boydelaat.nl or boy.delaat@onlineprepaidservices.com",
+            "homepage": "http://www.boydelaat.nl/ or http://www.onlineprepaidservices.com/nl/"
         }
     ],
     "autoload": {
         "psr-0": { "Omnipay\\Adyen\\" : "src/" }
     },
-    "require": {
-        "omnipay/common": "~2.0"
-    },
     "require-dev": {
         "omnipay/tests": "~2.0"
+    },
+    "require": {
+        "omnipay/common": "^2.4"
     }
 }

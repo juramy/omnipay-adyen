@@ -2,6 +2,7 @@
 
 namespace Omnipay\Adyen;
 
+use Omnipay\Adyen\Message\Notification;
 use Omnipay\Common\AbstractGateway;
 use Omnipay\Adyen\Message\CompletePurchaseResponse;
 
@@ -23,7 +24,8 @@ class Gateway extends AbstractGateway
     {
         return array(
             'testMode' => true,
-            'secret' => 'see-what-is-configured-in-the-adyen-skin',
+            'secret'   => 'see-what-is-configured-in-the-adyen-skin',
+            'hmacKey'  => 'see-what-is-configured-in-the-adyen-notification'
         );
     }
 
@@ -87,6 +89,16 @@ class Gateway extends AbstractGateway
         return $this->setParameter('secret', $value);
     }
 
+    public function getHmacKey()
+    {
+        return $this->getParameter('hmacKey');
+    }
+
+    public function setHmacKey($value)
+    {
+        return $this->setParameter('hmacKey', $value);
+    }
+
     public function getShopperLocale()
     {
         return $this->getParameter('shopperLocale');
@@ -145,5 +157,20 @@ class Gateway extends AbstractGateway
     public function completePurchase(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\Adyen\Message\CompletePurchaseRequest', $parameters);
+    }
+
+    public function capture(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\Adyen\Message\CaptureRequest', $parameters);
+    }
+
+    public function refund(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\Adyen\Message\RefundRequest', $parameters);
+    }
+
+    public function acceptNotification()
+    {
+        return new Notification(array_replace($this->getParameters(), $this->httpRequest->request->all(), $this->httpRequest->query->all()));
     }
 }
