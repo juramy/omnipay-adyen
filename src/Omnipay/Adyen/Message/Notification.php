@@ -39,7 +39,23 @@ class Notification implements NotificationInterface
     {
         $this->parameters = new ParameterBag;
 
-        Helper::initialize($this, $parameters);
+        $tempParams = array();
+
+        foreach ($parameters as $key => $value) {
+            if (is_array($value) || is_object($value)) {
+                $tempParams[$key] = (array) $value;
+
+                foreach ((array) $value as $subKey => $subValue) {
+                    $tempParams[$subKey] = $subValue;
+                }
+
+                continue;
+            }
+
+            $tempParams[$key] = $value;
+        }
+
+        Helper::initialize($this, $tempParams);
 
         return $this;
     }
