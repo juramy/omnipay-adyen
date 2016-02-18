@@ -65,6 +65,15 @@ class Notification implements NotificationInterface
         return $this->parameters->get($key);
     }
 
+    private function getAdditionalDataParameter($parameter)
+    {
+        if (is_array($this->getAdditionalData()) && isset($this->getAdditionalData()[$parameter])) {
+            return $this->getAdditionalData()[$parameter];
+        }
+
+        return '';
+    }
+
     /**
      * Set a single parameter
      *
@@ -84,6 +93,16 @@ class Notification implements NotificationInterface
         $boolVal = (is_string($val) ? filter_var($val, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : (bool)$val);
 
         return ($boolVal === null && !$returnNull ? false : $boolVal);
+    }
+
+    public function getHmacKey()
+    {
+        return $this->getParameter('hmacKey');
+    }
+
+    public function setHmacKey($value)
+    {
+        return $this->setParameter('hmacKey', $value);
     }
 
     public function getEventDate()
@@ -226,6 +245,45 @@ class Notification implements NotificationInterface
         $this->parameters->set('live', $this->isTrue($value));
     }
 
+    private function getDataWithoutSignature()
+    {
+        $data = array();
+
+        $data['pspReference'] = $this->getPspReference();
+        $data['originalReference'] = $this->getOriginalReference();
+        $data['merchantAccountCode'] = $this->getMerchantAccountCode();
+        $data['merchantReference'] = $this->getMerchantReference();
+        $data['value'] = $this->getValue();
+        $data['currencyCode'] = $this->getCurrency();
+        $data['eventCode'] = $this->getEventCode();
+        $data['success'] = var_export($this->getSuccess(), true);
+
+        return $data;
+    }
+
+    private static function calculateSha256Signature($hmacKey, $params)
+    {
+        // The character escape function
+        $escapeVal = function ($val) {
+            return str_replace(':', '\\:', str_replace('\\', '\\\\', $val));
+        };
+
+        // Generate the signing data string
+        $signData = implode(":", array_map($escapeVal, array_values($params)));
+
+        // base64-encode the binary result of the HMAC computation
+        $merchantSig = base64_encode(hash_hmac('sha256', $signData, pack("H*", $hmacKey), true));
+
+        return $merchantSig;
+    }
+
+    private function validateSignature()
+    {
+        $calculatedSign = $this->calculateSha256Signature($this->getHmacKey(), $this->getDataWithoutSignature());
+
+        return strcmp($calculatedSign, $this->getAdditionalDataParameter('hmacSignature')) == 0;
+    }
+
     /**
      * Get the raw data array for this message. The format of this varies from gateway to
      * gateway, but will usually be either an associative array, or a SimpleXMLElement.
@@ -305,6 +363,7 @@ class Notification implements NotificationInterface
                 !empty($this->getMerchantAccountCode()) &&
                 !empty($this->getMerchantReference()) &&
                 !empty($this->getPaymentMethod()) &&
-                is_bool($this->getSuccess());
+                is_bool($this->getSuccess() &&
+                $this->validateSignature());
     }
 }

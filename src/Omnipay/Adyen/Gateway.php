@@ -25,6 +25,7 @@ class Gateway extends AbstractGateway
         return array(
             'testMode' => true,
             'secret'   => 'see-what-is-configured-in-the-adyen-skin',
+            'hmacKey'  => 'see-what-is-configured-in-the-adyen-notification'
         );
     }
 
@@ -86,6 +87,16 @@ class Gateway extends AbstractGateway
     public function setSecret($value)
     {
         return $this->setParameter('secret', $value);
+    }
+
+    public function getHmacKey()
+    {
+        return $this->getParameter('hmacKey');
+    }
+
+    public function setHmacKey($value)
+    {
+        return $this->setParameter('hmacKey', $value);
     }
 
     public function getShopperLocale()
