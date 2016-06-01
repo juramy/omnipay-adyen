@@ -6,9 +6,9 @@ use Omnipay\Common\Message\AbstractRequest;
 use Guzzle\Common\Event;
 
 /**
- * Adyen Refund Request
+ * Adyen Cancel Request
  */
-class RefundRequest extends AbstractRequest
+class CancelRequest extends AbstractRequest
 {
     public function getUsername()
     {
@@ -61,8 +61,6 @@ class RefundRequest extends AbstractRequest
         $data = array();
 
         $data['merchantAccount'] = $this->getMerchantAccount();
-        $data['modificationAmount']['value'] = $this->getAmountInteger();
-        $data['modificationAmount']['currency'] = $this->getCurrency();
         $data['originalReference'] = $this->getPspId();
         $data['reference'] = $this->getDescription();
 
@@ -109,6 +107,6 @@ class RefundRequest extends AbstractRequest
 
     public function getEndPoint()
     {
-        return ('https://pal-' . ($this->getTestMode() ? 'test' : 'live') . '.adyen.com/pal/servlet/Payment/v12/Refund');
+        return ('https://pal-' . ($this->getTestMode() ? 'test' : 'live') . '.adyen.com/pal/servlet/Payment/v12/Cancel');
     }
 }
