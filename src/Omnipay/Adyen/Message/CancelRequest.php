@@ -107,6 +107,6 @@ class CancelRequest extends AbstractRequest
 
     public function getEndPoint()
     {
-        return ('https://pal-' . ($this->getTestMode() ? 'test' : 'live') . '.adyen.com/pal/servlet/Payment/v12/Cancel');
+        return ('https://pal-' . ($this->getTestMode() ? 'test' : 'live') . '.adyen.com/pal/servlet/Payment/v12/cancel');
     }
 }
