@@ -8,7 +8,7 @@ use Guzzle\Common\Event;
 /**
  * Adyen Capture Request
  */
-class Capture extends AbstractRequest
+class CaptureRequest extends AbstractRequest
 {
     public function getUsername()
     {
