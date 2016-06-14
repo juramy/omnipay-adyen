@@ -35,8 +35,8 @@
         },
         {
             "name": "Boy de Laat",
-            "email": "boy@boydelaat.nl or boy.delaat@onlineprepaidservices.com",
-            "homepage": "http://www.boydelaat.nl/ or http://www.onlineprepaidservices.com/nl/"
+            "email": "boy@boydelaat.nl",
+            "homepage": "http://www.boydelaat.nl/"
         }
     ],
     "autoload": {

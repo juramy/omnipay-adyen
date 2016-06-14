@@ -6,9 +6,9 @@ use Omnipay\Common\Message\AbstractRequest;
 use Guzzle\Common\Event;
 
 /**
- * Adyen Capture Request
+ * Adyen Void Request
  */
-class CaptureRequest extends AbstractRequest
+class VoidRequest extends AbstractRequest
 {
     public function getUsername()
     {
@@ -56,15 +56,13 @@ class CaptureRequest extends AbstractRequest
      */
     public function getData()
     {
-        $this->validate('merchantAccount', 'amount', 'currency', 'pspId', 'description');
+        $this->validate('merchantAccount', 'pspId', 'description');
 
-        $data = array();
+        $data = [];
 
-        $data['merchantAccount'] = $this->getMerchantAccount();
-        $data['modificationAmount']['value'] = $this->getAmountInteger();
-        $data['modificationAmount']['currency'] = $this->getCurrency();
+        $data['merchantAccount']   = $this->getMerchantAccount();
         $data['originalReference'] = $this->getPspId();
-        $data['reference'] = $this->getDescription();
+        $data['reference']         = $this->getDescription();
 
         return $data;
     }
@@ -84,10 +82,10 @@ class CaptureRequest extends AbstractRequest
 
         $httpRequest = $this->httpClient->post(
             $this->getEndpoint(),
-            array(
-                'Accept' => 'application/json',
+            [
+                'Accept'       => 'application/json',
                 'Content-type' => 'application/json',
-            ),
+            ],
             json_encode($data)
         );
 
@@ -98,17 +96,18 @@ class CaptureRequest extends AbstractRequest
 
     /**
      * @param mixed $data
-     * @return PurchaseResponse
+     *
+     * @return VoidResponse
      */
     public function sendData($data)
     {
         $httpResponse = $this->sendRequest($data);
 
-        return $this->response = new CaptureResponse($this, $httpResponse->json());
+        return $this->response = new VoidResponse($this, $httpResponse->json());
     }
 
     public function getEndPoint()
     {
-        return ('https://pal-' . ($this->getTestMode() ? 'test' : 'live') . '.adyen.com/pal/servlet/Payment/v12/capture');
+        return ('https://pal-' . ($this->getTestMode() ? 'test' : 'live') . '.adyen.com/pal/servlet/Payment/v12/cancel');
     }
 }
