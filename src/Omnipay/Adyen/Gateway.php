@@ -169,9 +169,9 @@ class Gateway extends AbstractGateway
         return $this->createRequest('\Omnipay\Adyen\Message\RefundRequest', $parameters);
     }
 
-    public function cancel(array $parameters = array())
+    public function void(array $parameters = array())
     {
-        return $this->createRequest('\Omnipay\Adyen\Message\CancelRequest', $parameters);
+        return $this->createRequest('\Omnipay\Adyen\Message\VoidRequest', $parameters);
     }
 
     public function acceptNotification()

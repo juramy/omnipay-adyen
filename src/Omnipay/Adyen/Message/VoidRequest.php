@@ -6,9 +6,9 @@ use Omnipay\Common\Message\AbstractRequest;
 use Guzzle\Common\Event;
 
 /**
- * Adyen Cancel Request
+ * Adyen Void Request
  */
-class CancelRequest extends AbstractRequest
+class VoidRequest extends AbstractRequest
 {
     public function getUsername()
     {

@@ -4,7 +4,7 @@ namespace Omnipay\Adyen\Message;
 
 use Omnipay\Common\Message\AbstractResponse;
 
-class CancelResponse extends AbstractResponse
+class VoidResponse extends AbstractResponse
 {
     /**
      * {@inheritdoc}
