@@ -25,6 +25,7 @@ class Gateway extends AbstractGateway
         return array(
             'testMode' => true,
             'secret'   => 'see-what-is-configured-in-the-adyen-skin',
+            'skinCode' => 'see-what-is-configured-in-the-adyen-skin',
             'hmacKey'  => 'see-what-is-configured-in-the-adyen-notification'
         );
     }
