@@ -326,7 +326,7 @@ class PurchaseRequest extends AbstractRequest
         return $this->setParameter('fraudOffset', $value);
     }
 
-    private function getDataWithoutSignature()
+    public function getData()
     {
         $this->validate('secret', 'amount', 'currency', 'shipBeforeDate', 'merchantReference', 'skinCode', 'merchantAccount', 'sessionValidity');
         $data = array();
@@ -339,7 +339,6 @@ class PurchaseRequest extends AbstractRequest
         $data['skinCode'] = $this->getSkinCode();
         $data['merchantAccount'] = $this->getMerchantAccount();
         $data['sessionValidity'] = $this->getSessionValidity();
-        // merchantSig will be set later
 
         // Optional fields (again in the same order as listed on https://docs.adyen.com/display/TD/HPP+payment+fields)
         $data['shopperLocale'] = $this->getShopperLocale();
@@ -357,13 +356,7 @@ class PurchaseRequest extends AbstractRequest
         $data['offerEmail'] = $this->getOfferEmail();
         $data['resURL'] = $this->getReturnUrl();
 
-        return $data;
-    }
-
-    public function getData()
-    {
-        $data = $this->getDataWithoutSignature();
-        $data['merchantSig'] = $this->generateSignature(); // this field is also required
+        $data['merchantSig'] = $this->generateSignature($data);
 
         return $data;
     }
@@ -373,26 +366,26 @@ class PurchaseRequest extends AbstractRequest
      * secret configured in the skin.
      * The input is the concatenated values of a number of the payment session fields.
      * It is in Base64 encoded format.
+     *
+     * @param array $params
      */
-    private function generateSignature()
+    private function generateSignature(array $params)
     {
-        $params = $this->getDataWithoutSignature();
+        $params = array_filter($params);
+
+        // Sort the array by key using SORT_STRING order
+        ksort($params, SORT_STRING);
 
         // The character escape function
         $escapeVal = function ($val) {
             return str_replace(':', '\\:', str_replace('\\', '\\\\', $val));
         };
 
-        // Sort the array by key using SORT_STRING order
-        ksort($params, SORT_STRING);
-
         // Generate the signing data string
         $signData = implode(':', array_map($escapeVal, array_merge(array_keys($params), array_values($params))));
 
         // base64-encode the binary result of the HMAC computation
-        $merchantSig = base64_encode(hash_hmac('sha256', $signData, pack('H*', $this->getSecret()), true));
-
-        return $merchantSig;
+        return base64_encode(hash_hmac('sha256', $signData, pack('H*', $this->getSecret()), true));
     }
 
     /**

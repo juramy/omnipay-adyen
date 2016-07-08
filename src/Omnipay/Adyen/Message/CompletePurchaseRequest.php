@@ -102,21 +102,21 @@ class CompletePurchaseRequest extends PurchaseRequest
             'merchantReturnData' => $this->getMerchantReturnData()
         );
 
+        $params = array_filter($params);
+
+        // Sort the array by key using SORT_STRING order
+        ksort($params, SORT_STRING);
+
         // The character escape function
         $escapeVal = function ($val) {
             return str_replace(':', '\\:', str_replace('\\', '\\\\', $val));
         };
 
-        // Sort the array by key using SORT_STRING order
-        ksort($params, SORT_STRING);
-
         // Generate the signing data string
         $signData = implode(':', array_map($escapeVal, array_merge(array_keys($params), array_values($params))));
 
         // base64-encode the binary result of the HMAC computation
-        $merchantSig = base64_encode(hash_hmac('sha256', $signData, pack('H*', $this->getSecret()), true));
-
-        return $merchantSig;
+        return base64_encode(hash_hmac('sha256', $signData, pack("H*", $this->getSecret()), true));
     }
 
     public function send()

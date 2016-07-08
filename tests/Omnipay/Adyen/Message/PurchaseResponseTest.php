@@ -46,6 +46,6 @@ class PurchaseResponseTest extends TestCase
     
     public function testRedirectMethod()
     {
-        $this->assertSame('POST', $this->response->getRedirectMethod());
+        $this->assertSame('GET', $this->response->getRedirectMethod());
     }
 }

@@ -48,9 +48,13 @@ class CompletePurchaseRequestTest extends TestCase
         // Test a valid request.
         $response = $this->request->send();
         $this->assertTrue($response->isSuccessful());
+    }
 
+    public function testTamperedSend()
+    {
         // Test a tampered with request.
         $tamperedRequest = new CompletePurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
+
         $tamperedRequest->initialize(array(
             'secret' => '0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF',
             'authResult' => 'AUTHORISED',
@@ -60,6 +64,7 @@ class CompletePurchaseRequestTest extends TestCase
             'merchantReturnData' => '',
             'merchantSig' => 'tamered-with-merchant-sig'
         ));
+
         $response = $tamperedRequest->send();
         $this->assertFalse($response->isSuccessful());
     }
