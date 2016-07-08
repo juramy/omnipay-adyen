@@ -12,7 +12,6 @@ use Omnipay\Common\Message\RedirectResponseInterface;
  */
 class PurchaseResponse extends AbstractResponse implements RedirectResponseInterface
 {
-
     /**
      * @return boolean False to always redirect the customer to Adyen.
      */
@@ -31,16 +30,16 @@ class PurchaseResponse extends AbstractResponse implements RedirectResponseInter
 
     public function getRedirectUrl()
     {
-        return $this->getRequest()->getEndpoint();
+        return $this->getRequest()->getEndpoint() . '?' . http_build_query($this->getRedirectData());
     }
 
     public function getRedirectMethod()
     {
-        return 'POST';
+        return 'GET';
     }
 
     public function getRedirectData()
     {
-        return $this->data;
+        return array_filter($this->data);
     }
 }
