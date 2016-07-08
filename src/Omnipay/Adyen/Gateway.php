@@ -23,10 +23,11 @@ class Gateway extends AbstractGateway
     public function getDefaultParameters()
     {
         return array(
-            'testMode' => true,
-            'secret'   => 'see-what-is-configured-in-the-adyen-skin',
-            'skinCode' => 'see-what-is-configured-in-the-adyen-skin',
-            'hmacKey'  => 'see-what-is-configured-in-the-adyen-notification'
+            'testMode'          => true,
+            'merchantAccount'   => 'see-what-is-configured-in-the-adyen-skin',
+            'secret'            => 'see-what-is-configured-in-the-adyen-skin',
+            'skinCode'          => 'see-what-is-configured-in-the-adyen-skin',
+            'hmacKey'           => 'see-what-is-configured-in-the-adyen-notification'
         );
     }
 
