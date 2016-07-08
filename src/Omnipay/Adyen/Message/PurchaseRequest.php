@@ -179,6 +179,16 @@ class PurchaseRequest extends AbstractRequest
         return $this->setParameter('shopperEmail', $value);
     }
 
+    public function getSkipSelection()
+    {
+        return $this->getParameter('skipSelection');
+    }
+
+    public function setSkipSelection($value)
+    {
+        return $this->setParameter('skipSelection', (bool) $value);
+    }
+
     public function getCountryCode()
     {
         return $this->getParameter('countryCode');
@@ -415,10 +425,16 @@ class PurchaseRequest extends AbstractRequest
 
     public function getEndpoint()
     {
+        $endpoint = $this->getTestMode() ? $this->testEndpoint : $this->liveEndpoint;
+
         if (!empty($this->getCustomEndpoint())) {
-            return $this->getCustomEndpoint();
+            $endpoint =  $this->getCustomEndpoint();
         }
 
-        return $this->getTestMode() ? $this->testEndpoint : $this->liveEndpoint;
+        if ($this->getSkipSelection()) {
+            $endpoint = str_replace('pay.shtml', 'details.shtml', $endpoint);
+        }
+
+        return $endpoint;
     }
 }
