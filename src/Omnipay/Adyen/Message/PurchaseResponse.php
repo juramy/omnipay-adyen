@@ -28,6 +28,11 @@ class PurchaseResponse extends AbstractResponse implements RedirectResponseInter
         return true;
     }
 
+    public function getTransactionReference()
+    {
+        return $this->data['merchantReference'];
+    }
+
     public function getRedirectUrl()
     {
         return $this->getRequest()->getEndpoint() . '?' . http_build_query($this->getRedirectData());
