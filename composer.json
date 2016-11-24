@@ -1,5 +1,5 @@
 {
-    "name": "nilvola/omnipay-adyen",
+    "name": "juramy/omnipay-adyen",
     "type": "library",
     "description": "Adyen driver for the Omnipay payment processing library",
     "keywords": [
@@ -10,7 +10,7 @@
         "pay",
         "payment"
     ],
-    "homepage": "https://github.com/MujibAzizi/omnipay-adyen",
+    "homepage": "https://github.com/juramy/omnipay-adyen",
     "license": "MIT",
     "authors": [
         {
@@ -37,6 +37,10 @@
             "name": "Boy de Laat",
             "email": "boy@boydelaat.nl",
             "homepage": "http://www.boydelaat.nl/"
+        },
+        {
+            "name": "Juramy",
+            "homepage": "http://www.juramy.com"
         }
     ],
     "autoload": {
