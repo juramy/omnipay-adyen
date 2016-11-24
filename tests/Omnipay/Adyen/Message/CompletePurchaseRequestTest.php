@@ -35,9 +35,12 @@ class CompletePurchaseRequestTest extends TestCase
 
     public function testGenerateResponseSignature()
     {
+        $signatureMethod = new \ReflectionMethod($this->request, 'generateResponseSignature');
+        $signatureMethod->setAccessible(true);
+
         $this->assertSame(
             'YRTyF4SIdrW2mKIbNukCTkZ21dHCzcQYOevrBII+yUI=',
-            $this->request->generateResponseSignature($this->request->getData())
+            $signatureMethod->invoke($this->request, $this->request->getData())
         );
     }
 

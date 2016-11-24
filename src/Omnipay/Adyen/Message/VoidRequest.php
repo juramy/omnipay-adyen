@@ -50,6 +50,43 @@ class VoidRequest extends AbstractRequest
         return $this->setParameter('pspId', $value);
     }
 
+    public function getSkinCode()
+    {
+        return $this->getParameter('skinCode');
+    }
+
+    /**
+     * @param String $value The code of the skin to be used.
+     * You can have more than one skin associated with your account if you require a different branding.
+     */
+    public function setSkinCode($value)
+    {
+        return $this->setParameter('skinCode', $value);
+    }
+
+    public function getSecret()
+    {
+        return $this->getParameter('secret');
+    }
+
+    /**
+     * @param String $value A Secret known by You and Adyen, no one else.
+     */
+    public function setSecret($value)
+    {
+        return $this->setParameter('secret', $value);
+    }
+
+    public function getHmacKey()
+    {
+        return $this->getParameter('hmacKey');
+    }
+
+    public function setHmacKey($value)
+    {
+        return $this->setParameter('hmacKey', $value);
+    }
+
     /**
      * @return array
      * @throws \Omnipay\Common\Exception\InvalidRequestException

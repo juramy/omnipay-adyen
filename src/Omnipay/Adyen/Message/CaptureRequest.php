@@ -50,6 +50,39 @@ class CaptureRequest extends AbstractRequest
         return $this->setParameter('pspId', $value);
     }
 
+    public function getSecret()
+    {
+        return $this->getParameter('secret');
+    }
+
+    public function getSkinCode()
+    {
+        return $this->getParameter('skinCode');
+    }
+
+    public function setSkinCode($value)
+    {
+        return $this->setParameter('skinCode', $value);
+    }
+
+    /**
+     * @param String $value A Secret known by You and Adyen, no one else.
+     */
+    public function setSecret($value)
+    {
+        return $this->setParameter('secret', $value);
+    }
+
+    public function getHmacKey()
+    {
+        return $this->getParameter('hmacKey');
+    }
+
+    public function setHmacKey($value)
+    {
+        return $this->setParameter('hmacKey', $value);
+    }
+
     /**
      * @return array
      * @throws \Omnipay\Common\Exception\InvalidRequestException

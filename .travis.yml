@@ -6,11 +6,16 @@ php:
 env:
   - SYMFONY_VERSION="2.*" GUZZLE_VERSION="3.*"
 
-before_script:
+before_install:
+  - phpenv config-rm xdebug.ini
+
+install:
   - composer self-update
   - composer --version
+
+before_script:
   - composer require symfony/http-foundation:${SYMFONY_VERSION} --no-update
   - composer require guzzle/http:${GUZZLE_VERSION} --no-update
   - composer install -n --dev --prefer-source
 
-script: vendor/bin/phpcs --standard=PSR2 src && vendor/bin/phpunit --coverage-text
+script: bin/phpcs --standard=PSR1,PSR2 src && bin/phpunit --coverage-text

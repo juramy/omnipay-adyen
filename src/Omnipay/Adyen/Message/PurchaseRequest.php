@@ -54,6 +54,16 @@ class PurchaseRequest extends AbstractRequest
         return $this->setParameter('secret', $value);
     }
 
+    public function getHmacKey()
+    {
+        return $this->getParameter('hmacKey');
+    }
+
+    public function setHmacKey($value)
+    {
+        return $this->setParameter('hmacKey', $value);
+    }
+
     public function getShipBeforeDate()
     {
         return $this->getParameter('shipBeforeDate');
