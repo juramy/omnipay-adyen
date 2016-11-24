@@ -16,6 +16,6 @@ install:
 before_script:
   - composer require symfony/http-foundation:${SYMFONY_VERSION} --no-update
   - composer require guzzle/http:${GUZZLE_VERSION} --no-update
-  - composer install -n --dev --prefer-source
+  - composer install --no-interaction --prefer-source
 
-script: bin/phpcs --standard=PSR1,PSR2 src && bin/phpunit --coverage-text
+script: bin/phpcs --standard=PSR1,PSR2 src && bin/phpunit
