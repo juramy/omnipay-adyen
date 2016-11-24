@@ -178,6 +178,10 @@ class Gateway extends AbstractGateway
 
     public function acceptNotification()
     {
-        return new Notification(array_replace($this->getParameters(), $this->httpRequest->request->all(), $this->httpRequest->query->all()));
+        return new Notification(array_replace(
+            $this->getParameters(),
+            $this->httpRequest->request->all(),
+            $this->httpRequest->query->all()
+        ));
     }
 }

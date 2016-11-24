@@ -22,17 +22,15 @@ class CompletePurchaseRequestTest extends TestCase
 
     public function testGetData()
     {
-
         $data = $this->request->getData();
 
-        $this->assertSame(array (
+        $this->assertSame(array(
           'authResult' => 'AUTHORISED',
           'pspReference' => '1211992213193029',
           'merchantReference' => 'Internet Order 12345',
           'skinCode' => '4aD37dJA',
           'merchantSig' => 'YRTyF4SIdrW2mKIbNukCTkZ21dHCzcQYOevrBII+yUI='
         ), $data);
-
     }
 
     public function testGenerateResponseSignature()

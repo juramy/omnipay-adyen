@@ -6,7 +6,6 @@ use Omnipay\Tests\TestCase;
 
 class PurchaseResponseTest extends TestCase
 {
-    
     public function setUp()
     {
         $this->response = new PurchaseResponse($this->getMockRequest(), array(

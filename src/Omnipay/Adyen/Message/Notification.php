@@ -370,16 +370,18 @@ class Notification implements NotificationInterface
 
     public function isValid()
     {
-        return  is_bool($this->getLive()) &&
-                !empty($this->getParameter('currency')) &&
-                !empty($this->getParameter('value')) &&
-                !empty($this->getTransactionReference()) &&
-                !empty($this->getEventCode()) &&
-                !empty($this->getEventDate()) &&
-                !empty($this->getMerchantAccountCode()) &&
-                !empty($this->getMerchantReference()) &&
-                !empty($this->getPaymentMethod()) &&
-                is_bool($this->getSuccess() &&
-                $this->validateSignature());
+        return (
+            is_bool($this->getLive())
+            && ! empty($this->getParameter('currency'))
+            && ! empty($this->getParameter('value'))
+            && ! empty($this->getTransactionReference())
+            && ! empty($this->getEventCode())
+            && ! empty($this->getEventDate())
+            && ! empty($this->getMerchantAccountCode())
+            && ! empty($this->getMerchantReference())
+            && ! empty($this->getPaymentMethod())
+            && is_bool($this->getSuccess())
+            && $this->validateSignature()
+        );
     }
 }

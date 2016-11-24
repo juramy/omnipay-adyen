@@ -35,7 +35,10 @@ class PurchaseRequestTest extends TestCase
 
     public function testGenerateSignature()
     {
-        $this->assertSame('7WVqmmy+RU0NB1r03ddvAIn9PBubG3paxcYGg4+Zo84=', $this->request->generateSignature($this->request->getData()));
+        $this->assertSame(
+            '7WVqmmy+RU0NB1r03ddvAIn9PBubG3paxcYGg4+Zo84=',
+            $this->request->generateSignature($this->request->getData())
+        );
     }
     
     public function testGetSetSessionValidity()

@@ -109,6 +109,7 @@ class CaptureRequest extends AbstractRequest
 
     public function getEndPoint()
     {
-        return ('https://pal-' . ($this->getTestMode() ? 'test' : 'live') . '.adyen.com/pal/servlet/Payment/v12/capture');
+        return ('https://pal-' . ($this->getTestMode() ? 'test' : 'live')
+            . '.adyen.com/pal/servlet/Payment/v12/capture');
     }
 }

@@ -108,6 +108,7 @@ class VoidRequest extends AbstractRequest
 
     public function getEndPoint()
     {
-        return ('https://pal-' . ($this->getTestMode() ? 'test' : 'live') . '.adyen.com/pal/servlet/Payment/v12/cancel');
+        return ('https://pal-' . ($this->getTestMode() ? 'test' : 'live') .
+            '.adyen.com/pal/servlet/Payment/v12/cancel');
     }
 }

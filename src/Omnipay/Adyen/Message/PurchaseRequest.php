@@ -270,9 +270,11 @@ class PurchaseRequest extends AbstractRequest
     /**
      * Optional. The email address of the shopper.
      *
-     * If offerEmail is set to prompt, an extra Pay by Email payment method is added to the available payment method list.
+     * If offerEmail is set to prompt, an extra Pay by Email payment method is
+     * added to the available payment method list.
      *
-     * If the shopper selects this option, they receive an email with a link that they can use to complete the payment.
+     * If the shopper selects this option, they receive an email with a link
+     * that they can use to complete the payment.
      *
      * The sessionValidity time value determines the link validity.
      */
@@ -284,7 +286,8 @@ class PurchaseRequest extends AbstractRequest
     /**
      * Optional  order details to display to the shopper on the payment review page.
      *
-     * An HTML fragment containing the order details to display to the shopper on the payment review page,
+     * An HTML fragment containing the order details to display to the shopper
+     * on the payment review page,
      * just before the shopper proceeds to the final order confirmation.
      *
      * Data is compressed and encoded in the session to prevent data corruption,
@@ -305,15 +308,19 @@ class PurchaseRequest extends AbstractRequest
     /**
      * Optional field value that will be appended as-is to the return URL.
      *
-     * This field value is appended as-is to the return URL when the shopper completes, or abandons,
-     * the payment process and is redirected to your web shop.
+     * This field value is appended as-is to the return URL when the shopper
+     * completes, or abandons, the payment process and is redirected to your
+     * web shop.
      *
-     * Typically, this field is used to hold and transmit a session ID. Maximum allowed character length: 128 characters.
+     * Typically, this field is used to hold and transmit a session ID.
+     * Maximum allowed character length: 128 characters.
      *
      * Note:
-     * When you include the merchantReturnData parameter in your request, Adyen cannot guarantee that a payment method works as expected.
+     * When you include the merchantReturnData parameter in your request, Adyen
+     * cannot guarantee that a payment method works as expected.
      * Some redirect methods such as iDEAL apply size limitations to payment requests.
-     * If by including merchantReturnData in a request causes it to exceed the allowed maximum size, the payment can fail.
+     * If by including merchantReturnData in a request causes it to exceed the
+     * allowed maximum size, the payment can fail.
      */
     public function setMerchantReturnData($value)
     {
@@ -338,10 +345,19 @@ class PurchaseRequest extends AbstractRequest
 
     public function getData()
     {
-        $this->validate('secret', 'amount', 'currency', 'shipBeforeDate', 'merchantReference', 'skinCode', 'merchantAccount', 'sessionValidity');
+        $this->validate(
+            'secret',
+            'amount',
+            'currency',
+            'shipBeforeDate',
+            'merchantReference',
+            'skinCode',
+            'merchantAccount',
+            'sessionValidity'
+        );
         $data = array();
 
-        // Compulsory fields (in the same order as listed on https://docs.adyen.com/display/TD/HPP+payment+fields)
+        // Compulsory fields (as listed on https://docs.adyen.com/display/TD/HPP+payment+fields)
         $data['merchantReference'] = $this->getMerchantReference();
         $data['paymentAmount'] = $this->getAmountInteger();
         $data['currencyCode'] = $this->getCurrency();
