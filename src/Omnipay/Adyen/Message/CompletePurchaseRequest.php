@@ -139,4 +139,21 @@ class CompletePurchaseRequest extends PurchaseRequest
     {
         return $this->getAuthResult() == 'AUTHORISED' || $this->getAuthResult() == 'AUTHORISATION';
     }
+
+    /**
+     * {@inheritDoc}
+     * @see \Omnipay\Common\Message\AbstractRequest::initialize()
+     *
+     * Not completely sure this is the right way to have all the fields
+     * returned from Adyen; maybe the consumer of the Gateway should do it,
+     * but right now I don't see any better options.
+     */
+    public function initialize(array $parameters = array())
+    {
+        return parent::initialize(array_replace(
+            $parameters,
+            $this->httpRequest->request->all(),
+            $this->httpRequest->query->all()
+        ));
+    }
 }
