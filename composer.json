@@ -49,12 +49,12 @@
     "require-dev": {
         "omnipay/tests": "~2.0",
         "squizlabs/php_codesniffer": "^1.5",
-        "friendsofphp/php-cs-fixer": "^1.12",
         "phpunit/phpunit": "^3.7"
     },
     "require": {
-        "omnipay/common": "^2.4",
-        "php": "^7.0"
+        "omnipay/common": "2.3.*",
+        "php": "^7.0",
+        "symfony/http-foundation": "2.*"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
