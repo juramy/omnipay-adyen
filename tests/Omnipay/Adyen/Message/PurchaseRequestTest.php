@@ -62,6 +62,26 @@ class PurchaseRequestTest extends TestCase
         $this->assertSame($this->request->getMerchantAccount(), 'TESTACC');
     }
 
+    public function testGetMerchantData()
+    {
+        $merchantData = <<< 'EOJ'
+{
+    "customer_account_info": [{
+        "unique_account_identifier": "test@email.com",
+        "account_registration_date": "2017-03-10T14:51:42Z",
+        "account_last_modified": "2018-10-23T13:25:20Z"
+    }],
+    "payment_history_simple": [{
+        "unique_account_identifier": "test@email.com",
+        "paid_before": true
+    }]
+}
+EOJ;
+
+        $this->request->setMerchantData($merchantData);
+        $this->assertSame($this->request->getMerchantData(), base64_encode($merchantData));
+    }
+
     public function testGetSetSkinCode()
     {
         $this->request->setSkinCode('da45gy6');
