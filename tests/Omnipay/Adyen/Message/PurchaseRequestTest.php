@@ -127,7 +127,6 @@ class PurchaseRequestTest extends TestCase
         $this->assertSame($this->request->getMerchantData(), base64_encode(json_encode($merchantData)));
     }
 
-
     public function testGetSetSkinCode()
     {
         $this->request->setSkinCode('da45gy6');
