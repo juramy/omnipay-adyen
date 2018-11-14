@@ -163,7 +163,6 @@ class PurchaseRequestTest extends TestCase
 
     public function testShopperType()
     {
-
         $this->request->setShopperType('2');
         $this->assertSame($this->request->getShopperType(), '2');
     }

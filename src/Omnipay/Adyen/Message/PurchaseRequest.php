@@ -419,7 +419,6 @@ class PurchaseRequest extends AbstractRequest
         $data['shopperStatement'] = $this->getShopperStatement();
         $data['offerEmail'] = $this->getOfferEmail();
         $data['resURL'] = $this->getReturnUrl();
-        $data['shopperType'] = $this->getShopperType();
 
         if (! empty($this->getMerchantData())) {
             $data['openinvoicedata.merchantData'] = $this->getMerchantData();
