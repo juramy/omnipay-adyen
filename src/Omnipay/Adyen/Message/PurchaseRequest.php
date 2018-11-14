@@ -367,6 +367,19 @@ class PurchaseRequest extends AbstractRequest
         return $this->getParameter('merchantData');
     }
 
+    /**
+     * Optional field value that is required for klarna payment method which
+     * can be used if validation of the shopper fields is desired.
+     */
+    public function setShopperType($value)
+    {
+        return $this->setParameter('shopperType', $value);
+    }
+
+    public function getShopperType()
+    {
+        return $this->getParameter('shopperType');
+    }
 
     public function getData()
     {
@@ -409,6 +422,10 @@ class PurchaseRequest extends AbstractRequest
 
         if (! empty($this->getMerchantData())) {
             $data['openinvoicedata.merchantData'] = $this->getMerchantData();
+        }
+
+        if (! empty($this->getshopperType())) {
+            $data['shopperType'] = $this->getshopperType();
         }
 
         $data['merchantSig'] = $this->generateSignature($data);
