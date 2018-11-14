@@ -6,10 +6,16 @@ use Omnipay\Tests\TestCase;
 
 class PurchaseRequestTest extends TestCase
 {
+    /**
+     * @var array
+     */
+    private $originalData;
+
     public function setUp()
     {
         $this->request = new PurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
-        $this->request->initialize([
+
+        $this->originalData = [
             'merchantAccount' => 'testacc',
             'merchantReference' => 'TEST-10000',
             'secret' => '0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF',
@@ -19,7 +25,9 @@ class PurchaseRequestTest extends TestCase
             'shipBeforeDate' => '2013-11-11',
             'sessionValidity' => '2013-11-05T11:27:59',
             'currency' => 'EUR'
-        ]);
+        ];
+
+        $this->request->initialize($this->originalData);
     }
 
     public function testGetData()
@@ -31,6 +39,35 @@ class PurchaseRequestTest extends TestCase
         $this->assertSame('EUR', $data['currencyCode']);
         $this->assertSame('TEST-10000', $data['merchantReference']);
         $this->assertSame('upSRkqwZjw3Q3USND3Xmjmh4e1+XBTwLFFWX4hkfhSc=', $data['merchantSig']);
+    }
+
+    public function testGetDataWithAdditionalData()
+    {
+        $merchantData = <<< 'EOJ'
+{
+    "customer_account_info": [{
+        "unique_account_identifier": "test@email.com",
+        "account_registration_date": "2017-03-10T14:51:42Z",
+        "account_last_modified": "2018-10-23T13:25:20Z"
+    }],
+    "payment_history_simple": [{
+        "unique_account_identifier": "test@email.com",
+        "paid_before": true
+    }]
+}
+EOJ;
+        $this->originalData['merchantData'] = $merchantData;
+
+        $this->request->initialize($this->originalData);
+
+        $data = $this->request->getData();
+
+        $this->assertSame('testacc', $data['merchantAccount']);
+        $this->assertSame(1000, $data['paymentAmount']);
+        $this->assertSame('EUR', $data['currencyCode']);
+        $this->assertSame('TEST-10000', $data['merchantReference']);
+        $this->assertSame('+4NjzSZKCkWBcodQo3gVY8RqY64uLBSwahsE86ZXCAo=', $data['merchantSig']);
+        $this->assertSame($merchantData, base64_decode($data['openinvoicedata.merchantData']));
     }
 
     public function testGenerateSignature()
@@ -114,6 +151,7 @@ EOJ;
 
     public function testGetEndpoint()
     {
-        $this->assertSame($this->request->getEndpoint(), 'https://test.adyen.com/hpp/pay.shtml');
+        $this->assertSame($this->request->getEndpoint(),
+            'https://test.adyen.com/hpp/pay.shtml');
     }
 }
