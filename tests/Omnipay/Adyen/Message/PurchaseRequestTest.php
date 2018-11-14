@@ -155,7 +155,9 @@ class PurchaseRequestTest extends TestCase
 
     public function testGetEndpoint()
     {
-        $this->assertSame($this->request->getEndpoint(),
-            'https://test.adyen.com/hpp/pay.shtml');
+        $this->assertSame(
+            $this->request->getEndpoint(),
+            'https://test.adyen.com/hpp/pay.shtml'
+        );
     }
 }
