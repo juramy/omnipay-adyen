@@ -353,6 +353,21 @@ class PurchaseRequest extends AbstractRequest
         return $this->setParameter('fraudOffset', $value);
     }
 
+    /**
+     * Optional field value that is required for klarna payment method which contains
+     * customer account info and customer payment history
+     */
+    public function setMerchantData($value)
+    {
+        return $this->setParameter('merchantData', base64_encode(json_encode($value)));
+    }
+
+    public function getMerchantData()
+    {
+        return $this->getParameter('merchantData');
+    }
+
+
     public function getData()
     {
         $this->validate(
@@ -391,6 +406,10 @@ class PurchaseRequest extends AbstractRequest
         $data['shopperStatement'] = $this->getShopperStatement();
         $data['offerEmail'] = $this->getOfferEmail();
         $data['resURL'] = $this->getReturnUrl();
+
+        if (! empty($this->getMerchantData())) {
+            $data['openinvoicedata.merchantData'] = $this->getMerchantData();
+        }
 
         $data['merchantSig'] = $this->generateSignature($data);
 
