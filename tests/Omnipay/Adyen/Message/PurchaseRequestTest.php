@@ -59,6 +59,7 @@ class PurchaseRequestTest extends TestCase
             ]
         ];
         $this->originalData['merchantData'] = $merchantData;
+        $this->originalData['shopperType'] = '2';
 
         $this->request->initialize($this->originalData);
 
@@ -68,8 +69,9 @@ class PurchaseRequestTest extends TestCase
         $this->assertSame(1000, $data['paymentAmount']);
         $this->assertSame('EUR', $data['currencyCode']);
         $this->assertSame('TEST-10000', $data['merchantReference']);
-        $this->assertSame('aY0vBUqR5nioqqx19kEuoS0IPPyHw2MLn27UyHFs0OI=', $data['merchantSig']);
+        $this->assertSame('86Rbt9GY8jfufSRVFBZLOL3hAd27c6fzzPtnZUHqrVA=', $data['merchantSig']);
         $this->assertSame($merchantData, json_decode(base64_decode($data['openinvoicedata.merchantData']), true));
+        $this->assertSame('2', $data['shopperType']);
     }
 
     public function testGenerateSignature()
@@ -123,6 +125,7 @@ class PurchaseRequestTest extends TestCase
         $this->assertSame($this->request->getMerchantData(), base64_encode(json_encode($merchantData)));
     }
 
+
     public function testGetSetSkinCode()
     {
         $this->request->setSkinCode('da45gy6');
@@ -165,5 +168,11 @@ class PurchaseRequestTest extends TestCase
     {
         $this->request->setShopperType('2');
         $this->assertSame($this->request->getShopperType(), '2');
+    }
+
+    public function testShopperEmail()
+    {
+        $this->request->setShopperEmail('pepe@balr.com');
+        $this->assertSame($this->request->getShopperEmail(), 'pepe@balr.com');
     }
 }
