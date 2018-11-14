@@ -160,4 +160,11 @@ class PurchaseRequestTest extends TestCase
             'https://test.adyen.com/hpp/pay.shtml'
         );
     }
+
+    public function testShopperType()
+    {
+
+        $this->request->setShopperType('2');
+        $this->assertSame($this->request->getShopperType(), '2');
+    }
 }
