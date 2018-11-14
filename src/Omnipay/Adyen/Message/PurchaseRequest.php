@@ -359,7 +359,7 @@ class PurchaseRequest extends AbstractRequest
      */
     public function setMerchantData($value)
     {
-        return $this->setParameter('merchantData', base64_encode($value));
+        return $this->setParameter('merchantData', base64_encode(json_encode($value)));
     }
 
     public function getMerchantData()

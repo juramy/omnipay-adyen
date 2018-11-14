@@ -43,19 +43,21 @@ class PurchaseRequestTest extends TestCase
 
     public function testGetDataWithAdditionalData()
     {
-        $merchantData = <<< 'EOJ'
-{
-    "customer_account_info": [{
-        "unique_account_identifier": "test@email.com",
-        "account_registration_date": "2017-03-10T14:51:42Z",
-        "account_last_modified": "2018-10-23T13:25:20Z"
-    }],
-    "payment_history_simple": [{
-        "unique_account_identifier": "test@email.com",
-        "paid_before": true
-    }]
-}
-EOJ;
+        $merchantData = [
+            'customer_account_info' => [
+                [
+                    'unique_account_identifier' => 'test@email.com',
+                    'account_registration_date' => '2017-03-10T14:51:42+01:00',
+                    'account_last_modified' => '2017-03-10T14:51:42+01:00'
+                ]
+            ],
+            'payment_history_simple' => [
+                [
+                    'unique_account_identifier' => 'test@email.com',
+                    'paid_before' => true
+                ]
+            ]
+        ];
         $this->originalData['merchantData'] = $merchantData;
 
         $this->request->initialize($this->originalData);
@@ -66,8 +68,8 @@ EOJ;
         $this->assertSame(1000, $data['paymentAmount']);
         $this->assertSame('EUR', $data['currencyCode']);
         $this->assertSame('TEST-10000', $data['merchantReference']);
-        $this->assertSame('+4NjzSZKCkWBcodQo3gVY8RqY64uLBSwahsE86ZXCAo=', $data['merchantSig']);
-        $this->assertSame($merchantData, base64_decode($data['openinvoicedata.merchantData']));
+        $this->assertSame('aY0vBUqR5nioqqx19kEuoS0IPPyHw2MLn27UyHFs0OI=', $data['merchantSig']);
+        $this->assertSame($merchantData, json_decode(base64_decode($data['openinvoicedata.merchantData']), true));
     }
 
     public function testGenerateSignature()
@@ -101,22 +103,24 @@ EOJ;
 
     public function testGetMerchantData()
     {
-        $merchantData = <<< 'EOJ'
-{
-    "customer_account_info": [{
-        "unique_account_identifier": "test@email.com",
-        "account_registration_date": "2017-03-10T14:51:42Z",
-        "account_last_modified": "2018-10-23T13:25:20Z"
-    }],
-    "payment_history_simple": [{
-        "unique_account_identifier": "test@email.com",
-        "paid_before": true
-    }]
-}
-EOJ;
+        $merchantData = [
+            'customer_account_info' => [
+                [
+                    'unique_account_identifier' => 'test@email.com',
+                    'account_registration_date' => '2017-03-10T14:51:42+01:00',
+                    'account_last_modified' => '2017-03-10T14:51:42+01:00'
+                ]
+            ],
+            'payment_history_simple' => [
+                [
+                    'unique_account_identifier' => 'test@email.com',
+                    'paid_before' => true
+                ]
+            ]
+        ];
 
         $this->request->setMerchantData($merchantData);
-        $this->assertSame($this->request->getMerchantData(), base64_encode($merchantData));
+        $this->assertSame($this->request->getMerchantData(), base64_encode(json_encode($merchantData)));
     }
 
     public function testGetSetSkinCode()
