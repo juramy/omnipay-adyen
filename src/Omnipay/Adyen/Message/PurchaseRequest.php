@@ -354,20 +354,6 @@ class PurchaseRequest extends AbstractRequest
     }
 
     /**
-     * Optional field value that is required for klarna payment method which contains
-     * customer account info and customer payment history
-     */
-    public function setMerchantData($value)
-    {
-        return $this->setParameter('merchantData', base64_encode(json_encode($value)));
-    }
-
-    public function getMerchantData()
-    {
-        return $this->getParameter('merchantData');
-    }
-
-    /**
      * Optional field value that is required for klarna payment method which
      * can be used if validation of the shopper fields is desired.
      */
@@ -379,6 +365,20 @@ class PurchaseRequest extends AbstractRequest
     public function getShopperType()
     {
         return $this->getParameter('shopperType');
+    }
+
+    /**
+     * Optional field value that is required for klarna payment method which contains
+     * open invoice data
+     */
+    public function setAdditionalData($value)
+    {
+        return $this->setParameter('additionalData', $value);
+    }
+
+    public function getAdditionalData()
+    {
+        return $this->getParameter('additionalData');
     }
 
     public function getData()
@@ -420,8 +420,8 @@ class PurchaseRequest extends AbstractRequest
         $data['offerEmail'] = $this->getOfferEmail();
         $data['resURL'] = $this->getReturnUrl();
 
-        if (! empty($this->getMerchantData())) {
-            $data['openinvoicedata.merchantData'] = $this->getMerchantData();
+        if (! empty($this->getAdditionalData())) {
+            $data = $this->pushOpenInvoiceData($data, $this->getAdditionalData());
         }
 
         if (! empty($this->getshopperType())) {
@@ -458,6 +458,20 @@ class PurchaseRequest extends AbstractRequest
 
         // base64-encode the binary result of the HMAC computation
         return base64_encode(hash_hmac('sha256', $signData, pack('H*', $this->getSecret()), true));
+    }
+
+    /**
+     * @param array $data
+     * @param array $additionalData
+     * @return array
+     */
+    private function pushOpenInvoiceData(array $data, array $additionalData)
+    {
+        foreach ($additionalData as $key => $value) {
+            $data[$key] = $value;
+        }
+
+        return $data;
     }
 
     /**

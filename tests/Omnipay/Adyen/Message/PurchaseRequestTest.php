@@ -43,22 +43,26 @@ class PurchaseRequestTest extends TestCase
 
     public function testGetDataWithAdditionalData()
     {
-        $merchantData = [
-            'customer_account_info' => [
-                [
-                    'unique_account_identifier' => 'test@email.com',
-                    'account_registration_date' => '2017-03-10T14:51:42+01:00',
-                    'account_last_modified' => '2017-03-10T14:51:42+01:00'
-                ]
-            ],
-            'payment_history_simple' => [
-                [
-                    'unique_account_identifier' => 'test@email.com',
-                    'paid_before' => true
-                ]
-            ]
+        $additionalData = [
+            "openinvoicedata.merchantData" => "eyJjdXN0b21lcl9hY2NvdW50X2luZm8iOlt7InVuaXF1ZV9hY2NvdW50X2lkZW50aWZpZXIiOiJ0ZXN0QGVtYWlsLmNvbSIsImFjY291bnRfcmVnaXN0cmF0aW9uX2RhdGUiOiIyMDE3LTAzLTEwVDE0OjUxOjQyKzAxOjAwIiwiYWNjb3VudF9sYXN0X21vZGlmaWVkIjoiMjAxNy0wMy0xMFQxNDo1MTo0MiswMTowMCJ9XSwicGF5bWVudF9oaXN0b3J5X3NpbXBsZSI6W3sidW5pcXVlX2FjY291bnRfaWRlbnRpZmllciI6InRlc3RAZW1haWwuY29tIiwicGFpZF9iZWZvcmUiOnRydWV9XX0=",
+            "openinvoicedata.numberOfLines" => 2,
+            "openinvoicedata.line1.currencyCode" => "EUR",
+            "openinvoicedata.line1.description" => "Brand Shirt Black",
+            "openinvoicedata.line1.itemAmount" => 7500,
+            "openinvoicedata.line1.itemVatAmount" => 2100,
+            "openinvoicedata.line1.itemVatPercentage" => 2800,
+            "openinvoicedata.line1.numberOfItems" => 1,
+            "openinvoicedata.line1.vatCategory" => "high",
+            "openinvoicedata.line2.currencyCode" => "EUR",
+            "openinvoicedata.line2.description" => "V-Neck Shirt Grey",
+            "openinvoicedata.line2.itemAmount" => 8000,
+            "openinvoicedata.line2.itemVatAmount" => 2400,
+            "openinvoicedata.line2.itemVatPercentage" => 3000,
+            "openinvoicedata.line2.numberOfItems" => 2,
+            "openinvoicedata.line2.vatCategory" => "high",
         ];
-        $this->originalData['merchantData'] = $merchantData;
+
+        $this->originalData['additionalData'] = $additionalData;
         $this->originalData['shopperType'] = '2';
         $this->originalData['shopperEmail'] = 'pepe@balr.com';
 
@@ -70,10 +74,13 @@ class PurchaseRequestTest extends TestCase
         $this->assertSame(1000, $data['paymentAmount']);
         $this->assertSame('EUR', $data['currencyCode']);
         $this->assertSame('TEST-10000', $data['merchantReference']);
-        $this->assertSame('YZgTZ5geG5+9aAms8jeIjpenBHOthEbnXf8VkZ4qn50=', $data['merchantSig']);
-        $this->assertSame($merchantData, json_decode(base64_decode($data['openinvoicedata.merchantData']), true));
+        $this->assertSame('YVYBKvGlM7LyAyhLZyEuz81W2BI9ovnKeWKRCFwR5vc=', $data['merchantSig']);
         $this->assertSame('2', $data['shopperType']);
         $this->assertSame('pepe@balr.com', $data['shopperEmail']);
+        //only testing some of the open invoice data
+        $this->assertSame(2, $data['openinvoicedata.numberOfLines']);
+        $this->assertSame(7500, $data['openinvoicedata.line1.itemAmount']);
+        $this->assertSame(3000, $data['openinvoicedata.line2.itemVatPercentage']);
     }
 
     public function testGenerateSignature()
@@ -105,26 +112,29 @@ class PurchaseRequestTest extends TestCase
         $this->assertSame($this->request->getMerchantAccount(), 'TESTACC');
     }
 
-    public function testGetMerchantData()
+    public function testGetAdditionalData()
     {
-        $merchantData = [
-            'customer_account_info' => [
-                [
-                    'unique_account_identifier' => 'test@email.com',
-                    'account_registration_date' => '2017-03-10T14:51:42+01:00',
-                    'account_last_modified' => '2017-03-10T14:51:42+01:00'
-                ]
-            ],
-            'payment_history_simple' => [
-                [
-                    'unique_account_identifier' => 'test@email.com',
-                    'paid_before' => true
-                ]
-            ]
+        $additionalData = [
+            "openinvoicedata.merchantData" => "eyJjdXN0b21lcl9hY2NvdW50X2luZm8iOlt7InVuaXF1ZV9hY2NvdW50X2lkZW50aWZpZXIiOiJ0ZXN0QGVtYWlsLmNvbSIsImFjY291bnRfcmVnaXN0cmF0aW9uX2RhdGUiOiIyMDE3LTAzLTEwVDE0OjUxOjQyKzAxOjAwIiwiYWNjb3VudF9sYXN0X21vZGlmaWVkIjoiMjAxNy0wMy0xMFQxNDo1MTo0MiswMTowMCJ9XSwicGF5bWVudF9oaXN0b3J5X3NpbXBsZSI6W3sidW5pcXVlX2FjY291bnRfaWRlbnRpZmllciI6InRlc3RAZW1haWwuY29tIiwicGFpZF9iZWZvcmUiOnRydWV9XX0=",
+            "openinvoicedata.numberOfLines" => 2,
+            "openinvoicedata.line1.currencyCode" => "EUR",
+            "openinvoicedata.line1.description" => "Brand Shirt Black",
+            "openinvoicedata.line1.itemAmount" => 7500,
+            "openinvoicedata.line1.itemVatAmount" => 2100,
+            "openinvoicedata.line1.itemVatPercentage" => 2800,
+            "openinvoicedata.line1.numberOfItems" => 1,
+            "openinvoicedata.line1.vatCategory" => "high",
+            "openinvoicedata.line2.currencyCode" => "EUR",
+            "openinvoicedata.line2.description" => "V-Neck Shirt Grey",
+            "openinvoicedata.line2.itemAmount" => 8000,
+            "openinvoicedata.line2.itemVatAmount" => 2400,
+            "openinvoicedata.line2.itemVatPercentage" => 3000,
+            "openinvoicedata.line2.numberOfItems" => 2,
+            "openinvoicedata.line2.vatCategory" => "high",
         ];
 
-        $this->request->setMerchantData($merchantData);
-        $this->assertSame($this->request->getMerchantData(), base64_encode(json_encode($merchantData)));
+        $this->request->setAdditionalData($additionalData);
+        $this->assertSame($this->request->getAdditionalData(), $additionalData);
     }
 
     public function testGetSetSkinCode()
