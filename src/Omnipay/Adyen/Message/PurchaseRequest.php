@@ -376,6 +376,9 @@ class PurchaseRequest extends AbstractRequest
         return $this->setParameter('additionalData', $value);
     }
 
+    /**
+     * @return array
+     */
     public function getAdditionalData()
     {
         return $this->getParameter('additionalData');
@@ -390,6 +393,9 @@ class PurchaseRequest extends AbstractRequest
         return $this->setParameter('riskData', $value);
     }
 
+    /**
+     * @return array
+     */
     public function getRiskData()
     {
         return $this->getParameter('riskData');
