@@ -83,6 +83,37 @@ class PurchaseRequestTest extends TestCase
         $this->assertSame(3000, $data['openinvoicedata.line2.itemVatPercentage']);
     }
 
+    public function testGetDataWithRiskData()
+    {
+        $riskData = [
+            'riskdata.promotions.promotion1.promotionCode' => '123',
+            'riskdata.promotions.promotion1.promotionName' => 'BALR. Gift card promotion',
+            'riskdata.promotions.promotion1.promotionDiscountAmount' => 3575,
+            'riskdata.promotions.promotion1.promotionDiscountCurrency' => 'EUR',
+            'riskdata.promotions.promotion2.promotionCode' => '456',
+            'riskdata.promotions.promotion2.promotionName' => '€15 Discount',
+            'riskdata.promotions.promotion2.promotionDiscountAmount' => 1500,
+            'riskdata.promotions.promotion2.promotionDiscountCurrency' => 'EUR'
+        ];
+
+        $this->originalData['riskData'] = $riskData;
+
+        $this->request->initialize($this->originalData);
+        $data = $this->request->getData();
+
+        $this->assertSame('testacc', $data['merchantAccount']);
+        $this->assertSame(1000, $data['paymentAmount']);
+        $this->assertSame('EUR', $data['currencyCode']);
+        $this->assertSame('TEST-10000', $data['merchantReference']);
+        $this->assertSame('3XNFtSeUaKFUuH89QBHI4Mmre6m+CFf1Xw3H70Ns6h0=', $data['merchantSig']);
+
+        //only testing some of the risk promotion data
+        $this->assertSame('123', $data['riskdata.promotions.promotion1.promotionCode']);
+        $this->assertSame('BALR. Gift card promotion', $data['riskdata.promotions.promotion1.promotionName']);
+        $this->assertSame(3575, $data['riskdata.promotions.promotion1.promotionDiscountAmount']);
+        $this->assertSame('EUR', $data['riskdata.promotions.promotion1.promotionDiscountCurrency']);
+    }
+
     public function testGenerateSignature()
     {
         $signatureMethod = new \ReflectionMethod($this->request, 'generateSignature');

@@ -376,9 +376,29 @@ class PurchaseRequest extends AbstractRequest
         return $this->setParameter('additionalData', $value);
     }
 
+    /**
+     * @return array
+     */
     public function getAdditionalData()
     {
         return $this->getParameter('additionalData');
+    }
+
+    /**
+     * Optional field value that is required for klarna payment method which contains
+     * promotion data
+     */
+    public function setRiskData($value)
+    {
+        return $this->setParameter('riskData', $value);
+    }
+
+    /**
+     * @return array
+     */
+    public function getRiskData()
+    {
+        return $this->getParameter('riskData');
     }
 
     public function getData()
@@ -421,7 +441,11 @@ class PurchaseRequest extends AbstractRequest
         $data['resURL'] = $this->getReturnUrl();
 
         if (! empty($this->getAdditionalData())) {
-            $data = $this->pushOpenInvoiceData($data, $this->getAdditionalData());
+            $data = array_merge($data, $this->getAdditionalData());
+        }
+
+        if (! empty($this->getRiskData())) {
+            $data = array_merge($data, $this->getRiskData());
         }
 
         if (! empty($this->getshopperType())) {
@@ -458,20 +482,6 @@ class PurchaseRequest extends AbstractRequest
 
         // base64-encode the binary result of the HMAC computation
         return base64_encode(hash_hmac('sha256', $signData, pack('H*', $this->getSecret()), true));
-    }
-
-    /**
-     * @param array $data
-     * @param array $additionalData
-     * @return array
-     */
-    private function pushOpenInvoiceData(array $data, array $additionalData)
-    {
-        foreach ($additionalData as $key => $value) {
-            $data[$key] = $value;
-        }
-
-        return $data;
     }
 
     /**
