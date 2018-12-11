@@ -92,15 +92,17 @@ class CompletePurchaseRequest extends PurchaseRequest
 
     private function generateResponseSignature()
     {
-        $params = array(
-            'authResult'         => $this->getAuthResult(),
-            'pspReference'       => $this->getPspReference(),
-            'merchantReference'  => $this->getMerchantReference(),
-            'skinCode'           => $this->getSkinCode(),
-            'paymentMethod'      => $this->getPaymentMethod(),
-            'shopperLocale'      => $this->getShopperLocale(),
-            'merchantReturnData' => $this->getMerchantReturnData()
-        );
+        $params = $this->httpRequest->query->all();
+
+        unset($params['merchantSig']);
+
+        if ($this->httpRequest->query->has('additionalData_acquirerReference')) {
+            // this field is added to the signature when open invoice data is added to the request
+            // @see https://docs.adyen.com/developers/classic-integration/hosted-payment-pages/hosted-payment-pages-api
+            $params['additionalData.acquirerReference'] = $this->httpRequest->query->get('additionalData_acquirerReference');
+
+            unset($params['additionalData_acquirerReference']);
+        }
 
         $params = array_filter($params);
 
