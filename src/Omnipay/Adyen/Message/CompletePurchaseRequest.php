@@ -16,6 +16,7 @@ class CompletePurchaseRequest extends PurchaseRequest
         $data['merchantReference'] = $this->getMerchantReference();
         $data['skinCode'] = $this->getSkinCode();
         $data['merchantSig'] = $this->getMerchantSig();
+        $data['additionalData.acquirerReference'] = $this->getAdditionalDataAcquirerReference();
 
         return $data;
     }
@@ -90,6 +91,16 @@ class CompletePurchaseRequest extends PurchaseRequest
         return $this->setParameter('paymentMethod', $value);
     }
 
+    public function getAdditionalDataAcquirerReference()
+    {
+        return $this->getParameter('additionalData_acquirerReference');
+    }
+
+    public function setAdditionalDataAcquirerReference($value)
+    {
+        return $this->setParameter('additionalData_acquirerReference', $value);
+    }
+
     private function generateResponseSignature()
     {
         $params = array(
@@ -99,7 +110,10 @@ class CompletePurchaseRequest extends PurchaseRequest
             'skinCode'           => $this->getSkinCode(),
             'paymentMethod'      => $this->getPaymentMethod(),
             'shopperLocale'      => $this->getShopperLocale(),
-            'merchantReturnData' => $this->getMerchantReturnData()
+            'merchantReturnData' => $this->getMerchantReturnData(),
+            // this field is added to the signature when open invoice data is added to the request
+            // @see https://docs.adyen.com/developers/classic-integration/hosted-payment-pages/hosted-payment-pages-api
+            'additionalData.acquirerReference' => $this->getAdditionalDataAcquirerReference()
         );
 
         $params = array_filter($params);

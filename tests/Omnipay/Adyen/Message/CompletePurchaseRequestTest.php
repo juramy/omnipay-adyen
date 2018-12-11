@@ -25,11 +25,12 @@ class CompletePurchaseRequestTest extends TestCase
         $data = $this->request->getData();
 
         $this->assertSame(array(
-          'authResult' => 'AUTHORISED',
-          'pspReference' => '1211992213193029',
-          'merchantReference' => 'Internet Order 12345',
-          'skinCode' => '4aD37dJA',
-          'merchantSig' => 'YRTyF4SIdrW2mKIbNukCTkZ21dHCzcQYOevrBII+yUI='
+            'authResult' => 'AUTHORISED',
+            'pspReference' => '1211992213193029',
+            'merchantReference' => 'Internet Order 12345',
+            'skinCode' => '4aD37dJA',
+            'merchantSig' => 'YRTyF4SIdrW2mKIbNukCTkZ21dHCzcQYOevrBII+yUI=',
+            'additionalData.acquirerReference' => null
         ), $data);
     }
 
