@@ -467,7 +467,9 @@ class PurchaseRequest extends AbstractRequest
      */
     private function generateSignature(array $params)
     {
-        $params = array_filter($params);
+        $params = array_filter($params, function ($param) {
+            return (! is_null($param));
+        });
 
         // Sort the array by key using SORT_STRING order
         ksort($params, SORT_STRING);

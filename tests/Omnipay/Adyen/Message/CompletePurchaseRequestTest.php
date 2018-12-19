@@ -15,7 +15,7 @@ class CompletePurchaseRequestTest extends TestCase
             'pspReference' => '1211992213193029',
             'merchantReference' => 'Internet Order 12345',
             'skinCode' => '4aD37dJA',
-            'merchantReturnData' => '',
+            'merchantReturnData' => null,
             'merchantSig' => 'YRTyF4SIdrW2mKIbNukCTkZ21dHCzcQYOevrBII+yUI='
         ));
     }
