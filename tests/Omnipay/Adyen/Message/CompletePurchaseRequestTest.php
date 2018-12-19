@@ -16,7 +16,7 @@ class CompletePurchaseRequestTest extends TestCase
             'merchantReference' => 'Internet Order 12345',
             'skinCode' => '4aD37dJA',
             'merchantReturnData' => '',
-            'merchantSig' => 'YRTyF4SIdrW2mKIbNukCTkZ21dHCzcQYOevrBII+yUI='
+            'merchantSig' => 'ckzQlu2d0u0lSAUjVhWSvwWG7snYdXwPF+QZ5ODB+JY='
         ));
     }
 
@@ -29,7 +29,7 @@ class CompletePurchaseRequestTest extends TestCase
             'pspReference' => '1211992213193029',
             'merchantReference' => 'Internet Order 12345',
             'skinCode' => '4aD37dJA',
-            'merchantSig' => 'YRTyF4SIdrW2mKIbNukCTkZ21dHCzcQYOevrBII+yUI=',
+            'merchantSig' => 'ckzQlu2d0u0lSAUjVhWSvwWG7snYdXwPF+QZ5ODB+JY=',
             'additionalData.acquirerReference' => null
         ), $data);
     }
@@ -40,7 +40,7 @@ class CompletePurchaseRequestTest extends TestCase
         $signatureMethod->setAccessible(true);
 
         $this->assertSame(
-            'YRTyF4SIdrW2mKIbNukCTkZ21dHCzcQYOevrBII+yUI=',
+            'ckzQlu2d0u0lSAUjVhWSvwWG7snYdXwPF+QZ5ODB+JY=',
             $signatureMethod->invoke($this->request, $this->request->getData())
         );
     }
