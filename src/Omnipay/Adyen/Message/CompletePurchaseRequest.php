@@ -153,7 +153,7 @@ class CompletePurchaseRequest extends PurchaseRequest
      */
     public function isSuccessful()
     {
-        return $this->getAuthResult() == 'AUTHORISED' || $this->getAuthResult() == 'AUTHORISATION';
+        return in_array($this->getAuthResult(), ['AUTHORISED', 'AUTHORISATION', 'PENDING']);
     }
 
     /**

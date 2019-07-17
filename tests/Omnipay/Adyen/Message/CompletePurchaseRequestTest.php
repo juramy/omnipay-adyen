@@ -70,4 +70,20 @@ class CompletePurchaseRequestTest extends TestCase
         $response = $tamperedRequest->send();
         $this->assertFalse($response->isSuccessful());
     }
+
+    public function testSendWithPendingAuthResult()
+    {
+        $this->request->initialize(array(
+            'secret' => '0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF',
+            'authResult' => 'PENDING',
+            'pspReference' => '1211992213193029',
+            'merchantReference' => 'Internet Order 12345',
+            'skinCode' => '4aD37dJA',
+            'merchantReturnData' => null,
+            'merchantSig' => 'G+nJaL0jTmru7Ig+HnPOOfl7EFG/HC8B1NqflTPjy/8='
+        ));
+
+        $response = $this->request->send();
+        $this->assertTrue($response->isSuccessful());
+    }
 }
